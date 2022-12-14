@@ -1,0 +1,14 @@
+.card {
+  width: 18rem;
+}
+
+.list, .add-event-form {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.add-event {
+  width: fit-content;
+ 
+}
