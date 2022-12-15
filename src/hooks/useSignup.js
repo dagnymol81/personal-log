@@ -10,6 +10,7 @@ export const useSignup = () => {
   const { dispatch } = useAuthContext()
  
   const signup = async (email, password, displayName) => {
+
     setError(null)
 
     const res = await createUserWithEmailAndPassword(auth, email, password)
@@ -18,9 +19,6 @@ export const useSignup = () => {
       throw new Error('Could not complete signup')
     }
     
-    // add display name to user
-    // await res.user.updateProfile({ displayName })
-
     await updateProfile(auth.currentUser, {
       displayName
     })
@@ -28,9 +26,20 @@ export const useSignup = () => {
     // create a user document
     await setDoc(doc(db, 'users', res.user.uid), {
       displayName,
-      tags: []
-    })
-   
+      tags:    [ {
+        value: 'health', 
+        label: 'health'
+      },
+      {
+        value: 'work',
+        label: 'work'
+      },
+      {
+        value: 'home',
+        label: 'home'
+      }]
+    } )
+  
 
      // dispatch login action
      dispatch({ type: 'LOGIN', payload: res.user })

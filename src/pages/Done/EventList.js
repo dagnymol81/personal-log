@@ -16,11 +16,11 @@ export default function EventList({ events }) {
               <h5 className="card-title">{done.event}</h5>
               <p>{done.completedAt.toDate().toDateString()}<br />
               {formatDistanceToNow(done.completedAt.toDate(), { addSuffix: true })}</p>
-              {/* <p>Tags:&nbsp;
+              <p>Tags:&nbsp;
                 {done.tags && done.tags.map((tag, i) => (
-                  <span key={i}>{tag} </span>
+                  <span key={i}>{tag.value} </span>
                 ))}
-              </p> */}
+              </p>
               <i className="bi bi-trash3" onClick={() => handleClick(done.id)}></i>            
       </div>
       ))}
