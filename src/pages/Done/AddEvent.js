@@ -1,5 +1,5 @@
 import { db } from '../../firebase/config'
-import { collection, addDoc, Timestamp } from 'firebase/firestore'
+import { collection, addDoc, doc, getDoc, updateDoc,  arrayUnion, Timestamp } from 'firebase/firestore'
 import { useState } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import CreatableSelect from 'react-select/creatable';
@@ -17,11 +17,22 @@ export default function AddEvent({ events }) {
   const [newTags, setNewTags] = useState([])
   const { user } = useAuthContext()
 
+  const userRef = doc(db, "users", user.uid);
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     let tags = newTags.map(tag => {
-      return tag.value
+      return {
+        value: tag.value,
+        label: tag.value
+      }
+    })
+
+    tags.forEach(async (tag) => {
+      await updateDoc(userRef, {
+        tags: arrayUnion(tag)
+      })
     })
 
     await addDoc(collection(db, 'events'), {
@@ -30,6 +41,8 @@ export default function AddEvent({ events }) {
       uid: user.uid,
       tags
     })
+
+
     setNewEvent('')
   }
 
@@ -49,7 +62,7 @@ export default function AddEvent({ events }) {
           ))}
         </datalist>
 
-        <CreatableSelect 
+      <CreatableSelect 
           onChange= {(option) => setNewTags(option)} 
           options={options} 
           isMulti 

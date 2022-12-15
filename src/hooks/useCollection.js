@@ -14,6 +14,7 @@ export const useCollection = (c, _q) => {
     let ref = collection(db, c) // database, collection
 
     if (q) { // if there's a query
+      console.log('query' + q)
       ref = query(ref, where(...q))
     }
     

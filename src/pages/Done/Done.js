@@ -12,12 +12,10 @@ export default function Done() {
     'events',
     ['uid', '==', user.uid]
     )
-  console.log(events)
 
   return (
     <div>
       <h2>Events</h2>
-  
       <EventList events={events} />
       <AddEvent events={events} />
 
