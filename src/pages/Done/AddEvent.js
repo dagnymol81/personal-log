@@ -67,9 +67,9 @@ export default function AddEvent({ events }) {
   return (
     <div className="p-3 me-3 my-3 shadow add-event border rounded">
       <form onSubmit={handleSubmit} className="add-event-form">
+
         <input 
           list="pastEvents"
-          id="newEvent"
           placeholder="Add Event"
           onChange={(e) => setNewEvent(e.target.value)}
           value={newEvent}
