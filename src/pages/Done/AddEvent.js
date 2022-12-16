@@ -3,18 +3,19 @@ import { collection, addDoc, doc, getDoc, updateDoc,  arrayUnion, Timestamp } fr
 import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import CreatableSelect from 'react-select/creatable';
-import add from 'date-fns/add'
+import { useDates } from '../../hooks/useDates';
 
 export default function AddEvent({ events }) {
 
   const [options, setOptions] = useState(null)
   const [newEvent, setNewEvent] = useState('')
   const [newTags, setNewTags] = useState([])
-  
+
   const [due, setDue] = useState('')
   const [timeUnits, setTimeUnits] = useState('')
 
   const { user } = useAuthContext()
+  const { getTimeDue } = useDates()
 
   useEffect(() => {
     async function fetchUserDoc()  {
@@ -33,6 +34,8 @@ export default function AddEvent({ events }) {
 
   const userRef = doc(db, "users", user.uid);
 
+  const timeDue = useDates(due, timeUnits)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -49,38 +52,13 @@ export default function AddEvent({ events }) {
       })
     })
 
-    let timeDue = null
-    switch (timeUnits) {
-      case 'hours':
-        timeDue = add(new Date(), {
-          hours: Number(due)
-        })
-      break;
-      case 'days':
-        timeDue = add(new Date(), {
-          days: Number(due)
-        })
-        break;
-      case 'weeks':
-        timeDue = add(new Date(), {
-          weeks: Number(due)
-        })
-        break;
-      case 'months':
-        timeDue = add(new Date(), {
-          months: Number(due)
-        })
-        break;
-      default:
-        timeDue = null
-    }
-
+    const timeThisIsDue = getTimeDue(due, timeUnits)
+    console.log(timeThisIsDue)
 
     await addDoc(collection(db, 'events'), {
       event: newEvent,
       completedAt: Timestamp.fromDate(new Date()),
       uid: user.uid,
-      timeDue,
       tags
     })
 

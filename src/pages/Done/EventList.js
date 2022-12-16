@@ -16,9 +16,9 @@ export default function EventList({ events }) {
               <h5 className="card-title">{done.event}</h5>
               <p>{done.completedAt.toDate().toDateString()}<br />
               {formatDistanceToNow(done.completedAt.toDate(), { addSuffix: true })}</p>
-              <p>
+              {done.timeDue && <p>
               Do this again: {done.timeDue.toDate().toDateString()} in {formatDistanceToNow(done.timeDue.toDate())}
-              </p>
+              </p>}
               <p>Tags:&nbsp;
                 {done.tags && done.tags.map((tag, i) => (
                   <span key={i}>{tag.value} </span>
