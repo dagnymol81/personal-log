@@ -5,6 +5,11 @@ export const useDates = () => {
   const getTimeDue = (due, units) => {
     let timeDue = null
     switch (units) {
+      case 'minutes':
+        timeDue = add(new Date(), {
+          minutes: Number(due)
+        })
+        break;
       case 'hours':
         timeDue = add(new Date(), {
           hours: Number(due)

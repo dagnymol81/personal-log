@@ -1,6 +1,7 @@
 import { db } from '../../firebase/config'
 import { doc, deleteDoc } from "firebase/firestore"
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { useEffect, useState } from 'react'
 
 export default function EventList({ events }) {
 
@@ -9,8 +10,29 @@ export default function EventList({ events }) {
     await deleteDoc(ref)
   }
 
+  const [eventsDue, setEventsDue] = useState(null)
+
+  useEffect(() => {
+    if (events) {
+      setEventsDue(events.filter(event => event.timeDue.toDate() < Date.now()))
+    }
+    console.log(eventsDue)
+  }, [events])
+
+
   return (
     <div className="list">
+
+    <h3>Events Due</h3>
+    {eventsDue && eventsDue.map(due => (
+      <>
+      <p>{due.event}</p>
+      <p>{due.timeDue.toDate().toDateString()}</p>
+      </>
+    ))}
+
+    <h3>All Events</h3>
+
         {events && events.map(done => (
             <div key={done.id} className="card p-3 me-3 my-3 shadow">
               <h5 className="card-title">{done.event}</h5>

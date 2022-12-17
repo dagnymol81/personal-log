@@ -7,6 +7,7 @@ import { useDates } from '../../hooks/useDates';
 
 export default function AddEvent({ events }) {
 
+
   const [options, setOptions] = useState(null)
   const [newEvent, setNewEvent] = useState('')
   const [newTags, setNewTags] = useState([])
@@ -34,8 +35,6 @@ export default function AddEvent({ events }) {
 
   const userRef = doc(db, "users", user.uid);
 
-  const timeDue = useDates(due, timeUnits)
-
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -52,18 +51,21 @@ export default function AddEvent({ events }) {
       })
     })
 
-    const timeThisIsDue = getTimeDue(due, timeUnits)
-    console.log(timeThisIsDue)
+    const timeDue = getTimeDue(due, timeUnits)
+
 
     await addDoc(collection(db, 'events'), {
       event: newEvent,
       completedAt: Timestamp.fromDate(new Date()),
       uid: user.uid,
-      tags
+      tags,
+      timeDue
     })
 
-
     setNewEvent('')
+    setDue('')
+    setNewTags([])
+
   }
 
   return (
@@ -88,6 +90,7 @@ export default function AddEvent({ events }) {
       <span>Tags: </span>
       {options && <CreatableSelect 
           onChange= {(option) => setNewTags(option)} 
+          value={newTags}
           options={options} 
           isMulti 
         />}
@@ -97,16 +100,19 @@ export default function AddEvent({ events }) {
           Remind me again in
           <input 
             type="text"
+            value={due}
             onChange={(e) => setDue(e.target.value)}
           />
           <select
             value={timeUnits}
             onChange={(e) => setTimeUnits(e.target.value)}
           >
+            <option value="minutes">Minutes</option>
             <option value="hours">Hours</option>
             <option value="days">Days</option>
             <option value="weeks">Weeks</option>
             <option value="months">Months</option>
+
           </select>
         </div>
 
