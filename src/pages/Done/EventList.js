@@ -2,135 +2,120 @@ import { db } from '../../firebase/config'
 import { doc, deleteDoc } from "firebase/firestore"
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useEffect, useState } from 'react'
+import { isToday } from 'date-fns'
 
 export default function EventList({ events }) {
 
-  const handleClick = async (id) => {
+  const deleteItem = async (id) => {
     const ref = doc(db, 'events', id)
     await deleteDoc(ref)
   }
 
   const [eventsDue, setEventsDue] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState(null)
+  const [pastEvents, setPastEvents] = useState(null)
 
   useEffect(() => {
     if (events) {
-      setEventsDue(events.filter(event => event.timeDue.toDate() < Date.now()))
-      setUpcomingEvents(events.filter(event => event.timeDue.toDate() > Date.now()))
+      let timedEvents = events.filter(event => event.timeDue)
+      setEventsDue(timedEvents.filter(event => event.timeDue.toDate() < Date.now()).sort((a, b) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
+      setUpcomingEvents(timedEvents.filter(event => event.timeDue.toDate() > Date.now()).sort((a, b) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
+      setPastEvents(events.filter(event => !event.timeDue))
     }
     
-  }, [events, eventsDue])
+  }, [events])
 
 
   return (
 
     <div className="container">
 
-<div className="accordion" id="accordionExample">
-  <div className="accordion-item">
-    <h2 className="accordion-header" id="headingOne">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        It's time!
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-      <div className="accordion-body">
+    <table className="table">
+      <tbody>
 
-      {eventsDue && eventsDue.map(due => (
-      <>
-      <p>{due.event}&nbsp;
-      {formatDistanceToNow(due.timeDue.toDate(), { addSuffix: true })}&nbsp;
-      {due.tags && due.tags.map((tag, i) => (
-        <span key={i}>{tag.value} </span>
-      ))}
-      </p>
-      </>
+      <tr>
+          <th scope="column">Event</th>
+          <th scope="column">Next Up</th>
+          <th scope="column">Last Completed</th>
+        </tr>
 
-    ))}
+        <tr>
+            <th className="span" colSpan="3" scope="colgroup">It's time!</th>
+        </tr>
 
-      </div>
-    </div>
-  </div>
-  <div className="accordion-item">
-    <h2 className="accordion-header" id="headingTwo">
-      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Coming Attractions
-      </button>
-    </h2>
-    <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-      <div className="accordion-body">
+        {eventsDue && eventsDue.map(due => (
+          <tr key={due.id}>
+            <td>{due.event}</td>
+            <td>
+              {formatDistanceToNow(due.timeDue.toDate(), { addSuffix: true })}
+            </td>
+            <td>
+                {due.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
+                {!isToday(due.completedAt.toDate()) && due.completedAt.toDate().toDateString()}
+            </td>
+            {/* <td>
+              {due.tags && due.tags.map((tag, i) => (
+              <span key={i}>{tag.value}&nbsp;</span>))} 
+              </td> */}
 
+          </tr>
+        ))}
+      <tr>
+        <th className="span" colSpan="3" scope="colgroup">Coming Attractions</th>
+      </tr>
       {upcomingEvents && upcomingEvents.map(coming => (
-      <>
-      <p>{coming.event}&nbsp;
-      {formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}&nbsp;
-      {coming.tags && coming.tags.map((tag, i) => (
-        <span key={i}>{tag.value} </span>
+        <tr key={coming.id}>
+          <td>{coming.event}</td>
+          <td>{formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}</td>
+          <td>
+                {coming.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
+                {!isToday(coming.completedAt.toDate()) && coming.completedAt.toDate().toDateString()}
+            </td>
+          {/* <td>
+             {coming.tags && coming.tags.map((tag, i) => (
+            <span key={i}>{tag.value}&nbsp;</span>))} 
+            </td> */}
+
+        </tr>
       ))}
-      </p>
-      </>
+      <tr>
+        <th className="span" colSpan="3" scope="colgroup">Complete</th>
+      </tr>
+      {pastEvents && pastEvents.map(event => (
+        <tr key={event.id}>
+          <td>{event.event}</td>
+          <td>It's done! </td>
+          <td>
+                {event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
+                {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
+            </td>
+          {/* <td>
+             {event.tags && event.tags.map((tag, i) => (
+            <span key={i}>{tag.value}&nbsp;</span>))} 
+            </td> */}
+        </tr>
+      ))}
+    </tbody>
+  </table>
 
-    ))}
-
+<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog modal-dialog-centered">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </div>
-  </div>
-  <div className="accordion-item">
-    <h2 className="accordion-header" id="headingThree">
-      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Everything
-      </button>
-    </h2>
-    <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-      <div className="accordion-body">
-
-      {events && events.map(event => (
-      <>
-      <p>{event.event}&nbsp;
-      {formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })}&nbsp;
-      {event.tags && event.tags.map((tag, i) => (
-        <span key={i}>{tag.value} </span>
-      ))}
-      </p>
-      </>
-
-    ))}
-
+      <div className="modal-body">
+        ...
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
 </div>
 
-    {/* <div className="list">
-
-    <h3>Events Due</h3>
-    {eventsDue && eventsDue.map(due => (
-      <>
-      <p>{due.event}</p>
-      <p>{due.timeDue.toDate().toDateString()}</p>
-      </>
-    ))}
-
-    <h3>All Events</h3>
-
-        {events && events.map(done => (
-            <div key={done.id} className="card p-3 me-3 my-3 shadow">
-              <h5 className="card-title">{done.event}</h5>
-              <p>{done.completedAt.toDate().toDateString()}<br />
-              {formatDistanceToNow(done.completedAt.toDate(), { addSuffix: true })}</p>
-              {done.timeDue && <p>
-              Do this again: {done.timeDue.toDate().toDateString()} in {formatDistanceToNow(done.timeDue.toDate())}
-              </p>}
-              <p>Tags:&nbsp;
-                {done.tags && done.tags.map((tag, i) => (
-                  <span key={i}>{tag.value} </span>
-                ))}
-              </p>
-              <i className="bi bi-trash3" onClick={() => handleClick(done.id)}></i>            
-      </div>
-      ))}
-
-    </div> */}
-    </div>
+</div>
   )
 }

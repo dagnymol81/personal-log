@@ -15,7 +15,7 @@ export default function Done() {
 
   return (
     <div>
-      <h2>Events</h2>
+
       <EventList events={events} />
       <AddEvent events={events} />
 
