@@ -4,6 +4,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useEffect, useState } from 'react'
 import { isToday } from 'date-fns'
 
+
 export default function EventList({ events }) {
 
   const deleteItem = async (id) => {
@@ -28,94 +29,54 @@ export default function EventList({ events }) {
 
   return (
 
-    <div className="container">
-
-    <table className="table">
-      <tbody>
-
-      <tr>
-          <th scope="column">Event</th>
-          <th scope="column">Next Up</th>
-          <th scope="column">Last Completed</th>
-        </tr>
-
-        <tr>
-            <th className="span" colSpan="3" scope="colgroup">It's time!</th>
-        </tr>
+    <div className="event-list">
 
         {eventsDue && eventsDue.map(due => (
-          <tr key={due.id}>
-            <td>{due.event}</td>
-            <td>
-              {formatDistanceToNow(due.timeDue.toDate(), { addSuffix: true })}
-            </td>
-            <td>
-                {due.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
-                {!isToday(due.completedAt.toDate()) && due.completedAt.toDate().toDateString()}
-            </td>
-            {/* <td>
-              {due.tags && due.tags.map((tag, i) => (
-              <span key={i}>{tag.value}&nbsp;</span>))} 
-              </td> */}
+          <div key={due.id} className="event-listing"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip">
+            <div className="event"><h3>{due.event}</h3></div>
 
-          </tr>
+
+            <div className="time">
+            <div>
+            <strong>Last Completed: </strong>{isToday(due.completedAt.toDate()) && due.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+            {!isToday(due.completedAt.toDate()) && due.completedAt.toDate().toDateString()}<br />
+            <strong>Next Up: </strong>{formatDistanceToNow(due.timeDue.toDate(), { addSuffix: true })}<br />
+            <strong>Tags: </strong>{due.tags && due.tags.map((tag, i) => (
+            <span key={i}>{tag.value}&nbsp;</span>))} 
+            </div>
+            </div>
+
+
+
+          </div>
         ))}
-      <tr>
-        <th className="span" colSpan="3" scope="colgroup">Coming Attractions</th>
-      </tr>
+      <div>
+        <div className="span">Coming Attractions</div>
+      </div>
       {upcomingEvents && upcomingEvents.map(coming => (
-        <tr key={coming.id}>
-          <td>{coming.event}</td>
-          <td>{formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}</td>
-          <td>
+        <div key={coming.id}>
+          <div>{coming.event}</div>
+          <div>{formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}</div>
+          <div>
                 {coming.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
                 {!isToday(coming.completedAt.toDate()) && coming.completedAt.toDate().toDateString()}
-            </td>
-          {/* <td>
-             {coming.tags && coming.tags.map((tag, i) => (
-            <span key={i}>{tag.value}&nbsp;</span>))} 
-            </td> */}
+            </div>
 
-        </tr>
+        </div>
       ))}
-      <tr>
-        <th className="span" colSpan="3" scope="colgroup">Complete</th>
-      </tr>
+      <div>
+        <div>Complete</div>
+      </div>
       {pastEvents && pastEvents.map(event => (
-        <tr key={event.id}>
-          <td>{event.event}</td>
-          <td>It's done! </td>
-          <td>
+        <div key={event.id}>
+          <div>{event.event}</div>
+          <div>It's done! </div>
+          <div>
                 {event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
                 {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
-            </td>
-          {/* <td>
-             {event.tags && event.tags.map((tag, i) => (
-            <span key={i}>{tag.value}&nbsp;</span>))} 
-            </td> */}
-        </tr>
+            </div>
+        </div>
       ))}
-    </tbody>
-  </table>
-
-<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-dialog-centered">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div className="modal-body">
-        ...
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" className="btn btn-primary">Save changes</button>
-      </div>
     </div>
-  </div>
-</div>
-
-</div>
   )
 }

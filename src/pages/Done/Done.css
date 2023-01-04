@@ -16,3 +16,20 @@
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+.event-listing {
+  border: 1px solid gray;
+  margin: 2rem;
+  padding: 1rem;
+  box-shadow: 10px 10px 10px gainsboro;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.icons > i {
+  font-size: 2rem;
+}
