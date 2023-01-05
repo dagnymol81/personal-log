@@ -90,7 +90,10 @@ export default function AddEvent() {
   }
 
   return (
+    <>
+    <h2>Add Event</h2>
     <div className="p-3 me-3 my-3 shadow add-event border rounded">
+
       <form onSubmit={handleSubmit} className="add-event-form">
 
         <div>
@@ -133,5 +136,6 @@ export default function AddEvent() {
         <button className="btn btn-light border rounded">Add Event</button>
       </form>
     </div>
+    </>
   )
 }

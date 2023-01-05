@@ -1,14 +1,5 @@
-.card {
-  width: 18rem;
-}
-
-.list {
-  display: flex;
-  gap: 2rem;
-  align-items: stretch;
-}
-
 .add-event {
+  margin-top: 2rem;
   width: fit-content
 }
 
@@ -19,9 +10,10 @@
 
 .event-listing {
   border: 1px solid gray;
-  margin: 2rem;
   padding: 1rem;
   box-shadow: 10px 10px 10px gainsboro;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .event-details {

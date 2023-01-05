@@ -39,7 +39,7 @@ export default function EventList({ events }) {
   useEffect(() => {
     if (events) {
       let timedEvents = events.filter(event => event.timeDue)
-      setEventsDue(timedEvents.filter(event => event.timeDue.toDate() < Date.now()).sort((a, b) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
+      setEventsDue(timedEvents.filter(event => event.timeDue.toDate() < Date.now()).sort((b, a) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
       setUpcomingEvents(timedEvents.filter(event => event.timeDue.toDate() > Date.now()).sort((a, b) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
       setPastEvents(events.filter(event => !event.timeDue))
     }
@@ -50,9 +50,12 @@ export default function EventList({ events }) {
   return (
 
     <div className="event-list">
+
+      <h2>Current Events</h2>
+
         {eventsDue && eventsDue.map(due => (
           <div key={due.id} className="event-listing">
-            <div className="event"><h3>{due.event}</h3></div>
+            <h3>{due.event}</h3>
             <div className="event-details">
               <div className="time">
                 <div>
@@ -70,31 +73,46 @@ export default function EventList({ events }) {
             </div>
           </div>
         ))}
-      <div>
-        <div className="span">Coming Attractions</div>
-      </div>
+
+      <h2>Coming Attractions</h2>
+
       {upcomingEvents && upcomingEvents.map(coming => (
         <div key={coming.id}  className="event-listing">
-          <div>{coming.event}</div>
-          <div>{formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}</div>
-          <div>
-                {coming.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
-                {!isToday(coming.completedAt.toDate()) && coming.completedAt.toDate().toDateString()}
+          <h3>{coming.event}</h3>
+          <div className="event-details">
+            <div>
+            <strong>Last Completed: </strong> 
+            {coming.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+            {!isToday(coming.completedAt.toDate()) && coming.completedAt.toDate().toDateString()}<br />
+            <strong>Next Up: </strong>
+            {formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}<br />
+            <strong>Tags: </strong>{coming.tags && coming.tags.map((tag, i) => (
+            <span key={i}>{tag.value}&nbsp;</span>))} 
             </div>
-
+            <div className="icons">
+                <i className="bi bi-check2-circle" onClick={() => markComplete(coming)}></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(coming)}></i>
+            </div>
         </div>
-      ))}
-      <div>
-        <div>Complete</div>
       </div>
+      ))}
+
+      <h2>Complete</h2>
+
       {pastEvents && pastEvents.map(event => (
         <div key={event.id}  className="event-listing">
-          <div>{event.event}</div>
-          <div>It's done! </div>
+          <h3>{event.event}</h3>
+          <div className="event-details">
           <div>
-                {event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
-                {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
+            <strong>Last Completed: </strong>{event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
+            {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
+            <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
+            <span key={i}>{tag.value}&nbsp;</span>))} 
             </div>
+          <div className="icons">
+            <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)}></i>
+          </div>
+          </div>
         </div>
       ))}
     </div>
