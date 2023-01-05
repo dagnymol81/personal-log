@@ -5,15 +5,35 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import CreatableSelect from 'react-select/creatable';
 import { useDates } from '../../hooks/useDates';
 
-export default function AddEvent({ events }) {
+export default function AddEvent() {
 
+  const getInterval = (due, units) => {
+    let interval = null;
+    switch (units) {
+      case 'minutes':
+        interval = due;
+        break;
+      case 'hours':
+        interval = due * 60;
+      break;
+      case 'days':
+        interval = due * 1440;
+        break;
+      case 'weeks':
+        interval = due * 10080
+        break;
+      default:
+        interval = null
+    }
+    return interval
+  }
 
   const [options, setOptions] = useState(null)
   const [newEvent, setNewEvent] = useState('')
   const [newTags, setNewTags] = useState([])
 
   const [due, setDue] = useState('')
-  const [timeUnits, setTimeUnits] = useState('')
+  const [timeUnits, setTimeUnits] = useState('minutes')
 
   const { user } = useAuthContext()
   const { getTimeDue } = useDates()
@@ -52,20 +72,21 @@ export default function AddEvent({ events }) {
     })
 
     const timeDue = getTimeDue(due, timeUnits)
-
+    const interval = getInterval(due, timeUnits)
 
     await addDoc(collection(db, 'events'), {
       event: newEvent,
       completedAt: Timestamp.fromDate(new Date()),
       uid: user.uid,
       tags,
-      timeDue
+      timeDue,
+      interval
     })
 
     setNewEvent('')
     setDue('')
     setNewTags([])
-
+    setTimeUnits('minutes')
   }
 
   return (
@@ -74,16 +95,11 @@ export default function AddEvent({ events }) {
 
         <div>
         <input 
-          list="pastEvents"
+          type="text"
           placeholder="Add Event"
-          onChange={(e) => setNewEvent(e.target.value)}
           value={newEvent}
+          onChange={(e) => setNewEvent(e.target.value)}
         />
-        <datalist id="pastEvents">
-          {events && events.map(done => (
-            <option value={done.event} key={done.id} />
-          ))}
-        </datalist>
         </div>
       
       <div>
@@ -111,8 +127,6 @@ export default function AddEvent({ events }) {
             <option value="hours">Hours</option>
             <option value="days">Days</option>
             <option value="weeks">Weeks</option>
-            <option value="months">Months</option>
-
           </select>
         </div>
 
