@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login/Login';
 import { useAuthContext } from './hooks/useAuthContext';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
   const { user, authIsReady } = useAuthContext()
 

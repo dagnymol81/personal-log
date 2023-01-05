@@ -1,14 +1,35 @@
 import { db } from '../../firebase/config'
-import { doc, deleteDoc } from "firebase/firestore"
+import { doc, deleteDoc, updateDoc } from "firebase/firestore"
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useEffect, useState } from 'react'
 import { isToday } from 'date-fns'
+import add from 'date-fns/add'
 
 export default function EventList({ events }) {
+
+  const [event, setEvent] = useState(null)
 
   const deleteItem = async (id) => {
     const ref = doc(db, 'events', id)
     await deleteDoc(ref)
+  }
+
+  const repeatTask = async(event) => {
+    const ref = doc(db, 'events', event.id)
+    const newDueDate = add(new Date(), {
+      minutes: event.interval
+    })
+    await updateDoc(ref, {
+      timeDue: newDueDate
+    })
+  }
+
+  const markComplete = async(event) => {
+    const ref = doc(db, 'events', event.id)
+    await updateDoc(ref, {
+      timeDue: null,
+      interval: null
+    })
   }
 
   const [eventsDue, setEventsDue] = useState(null)
@@ -18,7 +39,7 @@ export default function EventList({ events }) {
   useEffect(() => {
     if (events) {
       let timedEvents = events.filter(event => event.timeDue)
-      setEventsDue(timedEvents.filter(event => event.timeDue.toDate() < Date.now()).sort((a, b) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
+      setEventsDue(timedEvents.filter(event => event.timeDue.toDate() < Date.now()).sort((b, a) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
       setUpcomingEvents(timedEvents.filter(event => event.timeDue.toDate() > Date.now()).sort((a, b) => {return a.timeDue.toDate() - b.timeDue.toDate()}))
       setPastEvents(events.filter(event => !event.timeDue))
     }
@@ -28,94 +49,72 @@ export default function EventList({ events }) {
 
   return (
 
-    <div className="container">
+    <div className="event-list">
 
-    <table className="table">
-      <tbody>
-
-      <tr>
-          <th scope="column">Event</th>
-          <th scope="column">Next Up</th>
-          <th scope="column">Last Completed</th>
-        </tr>
-
-        <tr>
-            <th className="span" colSpan="3" scope="colgroup">It's time!</th>
-        </tr>
+      <h2>Current Events</h2>
 
         {eventsDue && eventsDue.map(due => (
-          <tr key={due.id}>
-            <td>{due.event}</td>
-            <td>
-              {formatDistanceToNow(due.timeDue.toDate(), { addSuffix: true })}
-            </td>
-            <td>
-                {due.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
-                {!isToday(due.completedAt.toDate()) && due.completedAt.toDate().toDateString()}
-            </td>
-            {/* <td>
-              {due.tags && due.tags.map((tag, i) => (
-              <span key={i}>{tag.value}&nbsp;</span>))} 
-              </td> */}
-
-          </tr>
+          <div key={due.id} className="event-listing">
+            <h3>{due.event}</h3>
+            <div className="event-details">
+              <div className="time">
+                <div>
+                  <strong>Last Completed: </strong>{isToday(due.completedAt.toDate()) && due.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+                  {!isToday(due.completedAt.toDate()) && due.completedAt.toDate().toDateString()}<br />
+                  <strong>Next Up: </strong>{formatDistanceToNow(due.timeDue.toDate(), { addSuffix: true })}<br />
+                  <strong>Tags: </strong>{due.tags && due.tags.map((tag, i) => (
+                  <span key={i}>{tag.value}&nbsp;</span>))} 
+                </div>
+              </div>
+              <div className="icons">
+                <i className="bi bi-check2-circle" onClick={() => markComplete(due)}></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(due)}></i>
+              </div>
+            </div>
+          </div>
         ))}
-      <tr>
-        <th className="span" colSpan="3" scope="colgroup">Coming Attractions</th>
-      </tr>
+
+      <h2>Coming Attractions</h2>
+
       {upcomingEvents && upcomingEvents.map(coming => (
-        <tr key={coming.id}>
-          <td>{coming.event}</td>
-          <td>{formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}</td>
-          <td>
-                {coming.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
-                {!isToday(coming.completedAt.toDate()) && coming.completedAt.toDate().toDateString()}
-            </td>
-          {/* <td>
-             {coming.tags && coming.tags.map((tag, i) => (
+        <div key={coming.id}  className="event-listing">
+          <h3>{coming.event}</h3>
+          <div className="event-details">
+            <div>
+            <strong>Last Completed: </strong> 
+            {coming.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+            {!isToday(coming.completedAt.toDate()) && coming.completedAt.toDate().toDateString()}<br />
+            <strong>Next Up: </strong>
+            {formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}<br />
+            <strong>Tags: </strong>{coming.tags && coming.tags.map((tag, i) => (
             <span key={i}>{tag.value}&nbsp;</span>))} 
-            </td> */}
-
-        </tr>
+            </div>
+            <div className="icons">
+                <i className="bi bi-check2-circle" onClick={() => markComplete(coming)}></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(coming)}></i>
+            </div>
+        </div>
+      </div>
       ))}
-      <tr>
-        <th className="span" colSpan="3" scope="colgroup">Complete</th>
-      </tr>
+
+      <h2>Complete</h2>
+
       {pastEvents && pastEvents.map(event => (
-        <tr key={event.id}>
-          <td>{event.event}</td>
-          <td>It's done! </td>
-          <td>
-                {event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
-                {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
-            </td>
-          {/* <td>
-             {event.tags && event.tags.map((tag, i) => (
+        <div key={event.id}  className="event-listing">
+          <h3>{event.event}</h3>
+          <div className="event-details">
+          <div>
+            <strong>Last Completed: </strong>{event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
+            {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
+            <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
             <span key={i}>{tag.value}&nbsp;</span>))} 
-            </td> */}
-        </tr>
+            </div>
+          <div className="icons">
+            <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)}></i>
+          </div>
+          </div>
+        </div>
       ))}
-    </tbody>
-  </table>
-
-<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog modal-dialog-centered">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div className="modal-body">
-        ...
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" className="btn btn-primary">Save changes</button>
-      </div>
     </div>
-  </div>
-</div>
-
-</div>
   )
 }
