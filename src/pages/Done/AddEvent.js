@@ -5,28 +5,9 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import CreatableSelect from 'react-select/creatable';
 import { useDates } from '../../hooks/useDates';
 
-export default function AddEvent() {
+import './Done.css'
 
-  const getInterval = (due, units) => {
-    let interval = null;
-    switch (units) {
-      case 'minutes':
-        interval = due;
-        break;
-      case 'hours':
-        interval = due * 60;
-      break;
-      case 'days':
-        interval = due * 1440;
-        break;
-      case 'weeks':
-        interval = due * 10080
-        break;
-      default:
-        interval = null
-    }
-    return interval
-  }
+export default function AddEvent() {
 
   const [options, setOptions] = useState(null)
   const [newEvent, setNewEvent] = useState('')
@@ -37,6 +18,7 @@ export default function AddEvent() {
 
   const { user } = useAuthContext()
   const { getTimeDue } = useDates()
+  const { getInterval } = useDates()
 
   useEffect(() => {
     async function fetchUserDoc()  {
@@ -92,12 +74,14 @@ export default function AddEvent() {
   return (
     <>
     <h2>Add Event</h2>
+    
     <div className="p-3 me-3 my-3 shadow add-event border rounded">
 
       <form onSubmit={handleSubmit} className="add-event-form">
 
         <div>
         <input 
+          className="form-control"
           type="text"
           placeholder="Add Event"
           value={newEvent}
@@ -105,18 +89,19 @@ export default function AddEvent() {
         />
         </div>
       
-      <div>
-      <span>Tags: </span>
+      <div className="tags">
+      <span className="input-group-text bg-light">Tags: </span>
       {options && <CreatableSelect 
           onChange= {(option) => setNewTags(option)} 
           value={newTags}
           options={options} 
           isMulti 
+          className="form-input"
         />}
       </div>
 
-        <div>
-          Remind me again in
+        <div className="input-group">
+        <span className="input-group-text bg-light">Remind me again in: </span> 
           <input 
             type="text"
             value={due}
@@ -125,10 +110,12 @@ export default function AddEvent() {
           <select
             value={timeUnits}
             onChange={(e) => setTimeUnits(e.target.value)}
+            className="bg-light form-select"
           >
-            <option value="minutes">Minutes</option>
+            <option value="minutes">Minutes 
+            </option>
             <option value="hours">Hours</option>
-            <option value="days">Days</option>
+            <option value="days">Days </option>
             <option value="weeks">Weeks</option>
           </select>
         </div>

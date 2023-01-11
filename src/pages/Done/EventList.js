@@ -32,6 +32,10 @@ export default function EventList({ events }) {
     })
   }
 
+  const displayTextBox = () => {
+    
+  }
+
   const [eventsDue, setEventsDue] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState(null)
   const [pastEvents, setPastEvents] = useState(null)
@@ -74,7 +78,7 @@ export default function EventList({ events }) {
           </div>
         ))}
 
-      <h2>Coming Attractions</h2>
+      <h2 onClick={() => displayTextBox()}>Coming Attractions</h2>
 
       {upcomingEvents && upcomingEvents.map(coming => (
         <div key={coming.id}  className="event-listing">

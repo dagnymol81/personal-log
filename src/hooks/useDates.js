@@ -40,8 +40,27 @@ export const useDates = () => {
     return timeDue
   }
 
-  
+  const getInterval = (due, units) => {
+    let interval = null;
+    switch (units) {
+      case 'minutes':
+        interval = due;
+        break;
+      case 'hours':
+        interval = due * 60;
+      break;
+      case 'days':
+        interval = due * 1440;
+        break;
+      case 'weeks':
+        interval = due * 10080
+        break;
+      default:
+        interval = null
+    }
+    return interval
+  }
 
-    return { getTimeDue }
+    return { getTimeDue, getInterval }
 
 }
