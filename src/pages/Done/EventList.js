@@ -7,9 +7,10 @@ import add from 'date-fns/add'
 
 export default function EventList({ events }) {
 
-  const [event, setEvent] = useState(null)
+  // const [event, setEvent] = useState(null)
 
   const deleteItem = async (id) => {
+    console.log('id: ' + id)
     const ref = doc(db, 'events', id)
     await deleteDoc(ref)
   }
@@ -30,6 +31,10 @@ export default function EventList({ events }) {
       timeDue: null,
       interval: null
     })
+  }
+
+  const displayTextBox = () => {
+    
   }
 
   const [eventsDue, setEventsDue] = useState(null)
@@ -74,7 +79,7 @@ export default function EventList({ events }) {
           </div>
         ))}
 
-      <h2>Coming Attractions</h2>
+      <h2 onClick={() => displayTextBox()}>Coming Attractions</h2>
 
       {upcomingEvents && upcomingEvents.map(coming => (
         <div key={coming.id}  className="event-listing">

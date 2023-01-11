@@ -3,6 +3,11 @@
   width: fit-content
 }
 
+.add-event-form {
+  display: flex;
+  flex-direction: column;
+}
+
 .bi {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -25,4 +30,18 @@
 
 .icons > i {
   font-size: 2rem;
+}
+
+.tags {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  width: 100%;
+}
+
+.tags span {
+  grid-column: 1 / 2;
+}
+
+.tags .form-input {
+  grid-column: 2 / 3;
 }

@@ -9,11 +9,18 @@ export const useSignup = () => {
   const [error, setError] = useState(null)
   const { dispatch } = useAuthContext()
  
-  const signup = async (email, password, displayName) => {
+  const signup = async (email, password, repeatPassword, displayName) => {
 
     setError(null)
 
-    const res = await createUserWithEmailAndPassword(auth, email, password)
+    if (password !== repeatPassword) {
+      setError('Passwords must match')
+      throw new Error('Passwords must match')
+    } 
+
+    const res = await createUserWithEmailAndPassword(auth, email, password).catch((e) => {
+      setError(e.message)
+    })
 
     if (!res) {
       throw new Error('Could not complete signup')

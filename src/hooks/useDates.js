@@ -40,8 +40,50 @@ export const useDates = () => {
     return timeDue
   }
 
-  
+  const getInterval = (due, units) => {
+    let interval = null;
+    switch (units) {
+      case 'minutes':
+        interval = due;
+        break;
+      case 'hours':
+        interval = due * 60;
+      break;
+      case 'days':
+        interval = due * 1440;
+        break;
+      case 'weeks':
+        interval = due * 10080
+        break;
+      default:
+        interval = null
+    }
+    return interval
+  }
 
-    return { getTimeDue }
+  const getDate = (date, time) => {
+    if (!time) {
+      time = "00:00"
+    }
+    if (!date) {
+      date = new Date()
+      date = date.toISOString().slice(0, 10)
+    }
+    const isoDate = `${date}T${time}:00`
+    let dueDate =  new Date(isoDate)
+    return dueDate
+  }
+
+  const getIntervalFromDate = (date) => {
+    const now = new Date()
+    const interval = Math.round((date - now) / 60000)
+    if (interval > 0) {
+      return interval
+    } else {
+      return null
+    }
+  }
+
+    return { getTimeDue, getInterval, getDate, getIntervalFromDate }
 
 }
