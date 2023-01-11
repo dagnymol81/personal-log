@@ -17,7 +17,7 @@ export default function Done() {
     <div>
 
       <EventList events={events} />
-      <AddEvent events={events} />
+      <AddEvent />
 
     </div>
   )

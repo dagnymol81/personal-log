@@ -7,9 +7,10 @@ import add from 'date-fns/add'
 
 export default function EventList({ events }) {
 
-  const [event, setEvent] = useState(null)
+  // const [event, setEvent] = useState(null)
 
   const deleteItem = async (id) => {
+    console.log('id: ' + id)
     const ref = doc(db, 'events', id)
     await deleteDoc(ref)
   }

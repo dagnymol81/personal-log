@@ -61,6 +61,29 @@ export const useDates = () => {
     return interval
   }
 
-    return { getTimeDue, getInterval }
+  const getDate = (date, time) => {
+    if (!time) {
+      time = "00:00"
+    }
+    if (!date) {
+      date = new Date()
+      date = date.toISOString().slice(0, 10)
+    }
+    const isoDate = `${date}T${time}:00`
+    let dueDate =  new Date(isoDate)
+    return dueDate
+  }
+
+  const getIntervalFromDate = (date) => {
+    const now = new Date()
+    const interval = Math.round((date - now) / 60000)
+    if (interval > 0) {
+      return interval
+    } else {
+      return null
+    }
+  }
+
+    return { getTimeDue, getInterval, getDate, getIntervalFromDate }
 
 }

@@ -7,18 +7,23 @@ import { useDates } from '../../hooks/useDates';
 
 import './Done.css'
 
-export default function AddEvent() {
+export default function AddEvent({ eventName, tags }) {
 
   const [options, setOptions] = useState(null)
-  const [newEvent, setNewEvent] = useState('')
-  const [newTags, setNewTags] = useState([])
+  const [newEvent, setNewEvent] = useState(eventName)
+  const [newTags, setNewTags] = useState(tags)
 
   const [due, setDue] = useState('')
   const [timeUnits, setTimeUnits] = useState('minutes')
 
+  const [time, setTime] = useState('')
+  const [date, setDate] = useState('')
+
   const { user } = useAuthContext()
   const { getTimeDue } = useDates()
   const { getInterval } = useDates()
+  const { getDate } = useDates()
+  const { getIntervalFromDate } = useDates()
 
   useEffect(() => {
     async function fetchUserDoc()  {
@@ -39,7 +44,6 @@ export default function AddEvent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     let tags = newTags.map(tag => {
       return {
         value: tag.value,
@@ -53,8 +57,17 @@ export default function AddEvent() {
       })
     })
 
-    const timeDue = getTimeDue(due, timeUnits)
-    const interval = getInterval(due, timeUnits)
+    let timeDue = null
+    let interval = null
+    if (due) {
+      interval = getInterval(due, timeUnits)
+      timeDue = getTimeDue(due, timeUnits)
+    } else if (time || date) {
+      timeDue = getDate(date, time)
+      interval = getIntervalFromDate(timeDue)
+    }
+
+    
 
     await addDoc(collection(db, 'events'), {
       event: newEvent,
@@ -69,6 +82,8 @@ export default function AddEvent() {
     setDue('')
     setNewTags([])
     setTimeUnits('minutes')
+    setTime('')
+    setDate('')
   }
 
   return (
@@ -105,7 +120,11 @@ export default function AddEvent() {
           <input 
             type="text"
             value={due}
-            onChange={(e) => setDue(e.target.value)}
+            onChange={(e) => {
+              setDue(e.target.value)
+              setTime('')
+              setDate('')
+            }}
           />
           <select
             value={timeUnits}
@@ -118,6 +137,30 @@ export default function AddEvent() {
             <option value="days">Days </option>
             <option value="weeks">Weeks</option>
           </select>
+        </div>
+
+        <div className="input-group">
+        <span className="input-group-text bg-light">Remind me at: </span> 
+          <input 
+            type="time"
+            value={time}
+            onChange={(e) => {
+              setTime(e.target.value)
+              setDue('')
+            }}
+            className="form-input"
+          />
+          <span className="input-group-text bg-light">&nbsp;</span> 
+          <input 
+            type="date"
+            value={date}
+            onChange={(e) => {
+              setDate(e.target.value)
+              setDue('')
+            }}
+            className="form-input"
+          />
+          <span className="input-group-text bg-light">&nbsp;</span> 
         </div>
 
         <button className="btn btn-light border rounded">Add Event</button>
