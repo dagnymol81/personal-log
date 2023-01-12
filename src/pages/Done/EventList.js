@@ -61,7 +61,7 @@ export default function EventList({ events }) {
   <div className="modal-dialog">
     <div className="modal-content">
       <div className="modal-body">
-        <h3>Editing: {event.event}</h3>
+        {event && <h3>Editing: {event.event}</h3>}
         <AddEvent 
           event={event}
           />
@@ -83,8 +83,14 @@ export default function EventList({ events }) {
               <div className="time">
                 <div>
                   <strong>Last Completed: </strong>{isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
-                  {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
-                  <strong>Next Up: </strong>{formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })}<br />
+                  {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
+                  &nbsp;({formatDistanceToNow(event.completedAt.toDate(), {addSuffix: true})})
+                  <br />
+                  <strong>Next Up: </strong>
+                  {isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+                  {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
+                  &nbsp;({formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })})
+                  <br />
                   <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
                   <span key={i}>{tag.value}&nbsp;</span>))} 
                 </div>
