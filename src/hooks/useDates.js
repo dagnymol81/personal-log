@@ -84,6 +84,37 @@ export const useDates = () => {
     }
   }
 
-    return { getTimeDue, getInterval, getDate, getIntervalFromDate }
+  const getTimeFromTimestamp = (timestamp) => {
+    return timestamp.toISOString.slice(11)
+  }
+
+  const getDateFromTimestamp = (timestamp) => {
+    return timestamp.toISOString.slice(0, 10)
+  }
+
+  const getIntervalInUnits = (interval) => {
+    let timeUnits = null
+    let timeNum = null
+    switch(interval) {
+      case interval % 10080 === 0:
+        timeNum = interval / 10080
+        timeUnits = 'weeks'
+        break;
+      case interval & 1440 === 0:
+        timeNum = interval / 1440
+        timeUnits = 'days'
+        break;
+      case interval % 60 === 0:
+        timeNum = interval / 60
+        timeUnits = 'minutes'
+        break;
+      default:
+        timeNum = interval
+        timeUnits = 'minutes'
+    }
+    return { timeNum, timeUnits }   
+  }
+
+    return { getTimeDue, getInterval, getDate, getIntervalFromDate, getDateFromTimestamp, getTimeFromTimestamp, getIntervalInUnits }
 
 }
