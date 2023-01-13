@@ -7,6 +7,8 @@ import Login from './pages/Login/Login';
 import { useAuthContext } from './hooks/useAuthContext';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Privacy from './pages/Privacy/Privacy';
+import Footer from './components/Footer';
 
 function App() {
   const { user, authIsReady } = useAuthContext()
@@ -41,7 +43,14 @@ function App() {
               <Login />
           }/>
 
+          <Route 
+            path="/privacy" 
+            element={
+              <Privacy />
+          }/>
+
         </Routes>
+        <Footer />
       </div>
     </div>
   );

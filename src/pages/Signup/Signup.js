@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useSignup } from '../../hooks/useSignup'
 import './Signup.css'
+import { signInWithRedirect } from 'firebase/auth'
+import { useGoogleSignup } from '../../hooks/useGoogleSignup'
+import google_signin from '../../google_signin.png'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
@@ -9,15 +12,19 @@ export default function Signup() {
   const [displayName, setDisplayName] = useState('')
 
   const { error, signup } = useSignup()
-  
+  const { auth, provider } = useGoogleSignup()
+
   const handleSubmit = (e) => {
     e.preventDefault()
     signup(email, password, repeatPassword, displayName)
   }
-  
+
   return (
     <div>
       <h2>Register</h2>
+
+      <img src={google_signin} alt="Sign In With Google" onClick={() => signInWithRedirect(auth, provider)} />
+
       <form onSubmit={handleSubmit}>
 
         <label htmlFor="email">email: </label>
@@ -65,6 +72,9 @@ export default function Signup() {
         <button className="btn btn-light border">Sign Up</button>
       </form>
       {error && <p className="error">{error}</p>} 
+
+
+
     </div>
   )
 }

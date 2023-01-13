@@ -16,3 +16,8 @@ input, button {
 h2 {
   padding-bottom: 1rem;
 }
+
+img {
+  width: 200px;
+  margin-bottom: 20px;
+}

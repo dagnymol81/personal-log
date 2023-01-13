@@ -3,12 +3,11 @@ import { doc, setDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 import { auth, db } from '../firebase/config'
-
  
 export const useSignup = () => {
   const [error, setError] = useState(null)
   const { dispatch } = useAuthContext()
- 
+
   const signup = async (email, password, repeatPassword, displayName) => {
 
     setError(null)
