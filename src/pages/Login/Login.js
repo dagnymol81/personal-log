@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useLogin } from '../../hooks/useLogin'
+import google_signin from '../../google_signin.png'
+import { signInWithRedirect } from 'firebase/auth'
+import { useGoogleSignup } from '../../hooks/useGoogleSignup'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -10,10 +13,16 @@ export default function Login() {
     e.preventDefault()
     login(email, password)
   }
+
+  const { auth, provider } = useGoogleSignup()
   
   return (
     <div>
       <h2>Login</h2>
+
+      <img src={google_signin} alt="Sign In With Google" onClick={() => signInWithRedirect(auth, provider)} />
+
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">email: </label>
           <input
