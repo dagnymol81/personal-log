@@ -4,10 +4,9 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useEffect, useState } from 'react'
 import { isToday } from 'date-fns'
 import add from 'date-fns/add'
+import AddEvent from './AddEvent'
 
 export default function EventList({ events }) {
-
-  // const [event, setEvent] = useState(null)
 
   const deleteItem = async (id) => {
     console.log('id: ' + id)
@@ -33,13 +32,15 @@ export default function EventList({ events }) {
     })
   }
 
-  const displayTextBox = () => {
-    
-  }
-
   const [eventsDue, setEventsDue] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState(null)
   const [pastEvents, setPastEvents] = useState(null)
+  const [event, setEvent] = useState(null)
+
+  const handleModal = (event) => {
+    setEvent(event)
+  }
+
 
   useEffect(() => {
     if (events) {
@@ -56,47 +57,72 @@ export default function EventList({ events }) {
 
     <div className="event-list">
 
+<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-body">
+        {event && <h3>Editing: {event.event}</h3>}
+        <AddEvent 
+          event={event}
+          />
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
       <h2>Current Events</h2>
 
-        {eventsDue && eventsDue.map(due => (
-          <div key={due.id} className="event-listing">
-            <h3>{due.event}</h3>
+        {eventsDue && eventsDue.map(event => (
+          <div key={event.id} className="event-listing">
+            <h3>{event.event}</h3>
             <div className="event-details">
               <div className="time">
                 <div>
-                  <strong>Last Completed: </strong>{isToday(due.completedAt.toDate()) && due.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
-                  {!isToday(due.completedAt.toDate()) && due.completedAt.toDate().toDateString()}<br />
-                  <strong>Next Up: </strong>{formatDistanceToNow(due.timeDue.toDate(), { addSuffix: true })}<br />
-                  <strong>Tags: </strong>{due.tags && due.tags.map((tag, i) => (
+                  <strong>Last Completed: </strong>{isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+                  {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
+                  &nbsp;({formatDistanceToNow(event.completedAt.toDate(), {addSuffix: true})})
+                  <br />
+                  <strong>Next Up: </strong>
+                  {isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+                  {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
+                  &nbsp;({formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })})
+                  <br />
+                  <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
                   <span key={i}>{tag.value}&nbsp;</span>))} 
                 </div>
               </div>
               <div className="icons">
-                <i className="bi bi-check2-circle" onClick={() => markComplete(due)}></i>
-                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(due)}></i>
+                <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleModal(event)}></i>
               </div>
             </div>
           </div>
         ))}
 
-      <h2 onClick={() => displayTextBox()}>Coming Attractions</h2>
+      <h2>Coming Attractions</h2>
 
-      {upcomingEvents && upcomingEvents.map(coming => (
-        <div key={coming.id}  className="event-listing">
-          <h3>{coming.event}</h3>
+      {upcomingEvents && upcomingEvents.map(event => (
+        <div key={event.id}  className="event-listing">
+          <h3>{event.event}</h3>
           <div className="event-details">
             <div>
             <strong>Last Completed: </strong> 
-            {coming.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
-            {!isToday(coming.completedAt.toDate()) && coming.completedAt.toDate().toDateString()}<br />
+            {event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+            {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
             <strong>Next Up: </strong>
-            {formatDistanceToNow(coming.timeDue.toDate(), { addSuffix: true })}<br />
-            <strong>Tags: </strong>{coming.tags && coming.tags.map((tag, i) => (
+            {formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })}<br />
+            <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
             <span key={i}>{tag.value}&nbsp;</span>))} 
             </div>
             <div className="icons">
-                <i className="bi bi-check2-circle" onClick={() => markComplete(coming)}></i>
-                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(coming)}></i>
+                <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleModal(event)}></i>
             </div>
         </div>
       </div>
@@ -116,6 +142,7 @@ export default function EventList({ events }) {
             </div>
           <div className="icons">
             <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)}></i>
+            <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={() => handleModal(event)}></i>
           </div>
           </div>
         </div>

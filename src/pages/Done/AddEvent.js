@@ -7,23 +7,30 @@ import { useDates } from '../../hooks/useDates';
 
 import './Done.css'
 
-export default function AddEvent({ eventName, tags }) {
+export default function AddEvent({ event }) {
 
   const [options, setOptions] = useState(null)
-  const [newEvent, setNewEvent] = useState(eventName)
-  const [newTags, setNewTags] = useState(tags)
+  const [newEvent, setNewEvent] = useState('')
+  const [newTags, setNewTags] = useState([])
+  const [interval, setInterval] = useState(null)
+  const [timeDue, setTimeDue] = useState(null)
 
-  const [due, setDue] = useState('')
+  useEffect(() => {
+    if (event) {
+      setNewEvent(event.event)
+      setNewTags(event.tags)
+    }
+  }, [event])
+
+  const [timeNum, setTimeNum] = useState('')
   const [timeUnits, setTimeUnits] = useState('minutes')
 
   const [time, setTime] = useState('')
   const [date, setDate] = useState('')
 
   const { user } = useAuthContext()
-  const { getTimeDue } = useDates()
-  const { getInterval } = useDates()
-  const { getDate } = useDates()
-  const { getIntervalFromDate } = useDates()
+
+  const { getTimeDue, getInterval,  getDate, getIntervalFromDate, } = useDates()
 
   useEffect(() => {
     async function fetchUserDoc()  {
@@ -57,14 +64,12 @@ export default function AddEvent({ eventName, tags }) {
       })
     })
 
-    let timeDue = null
-    let interval = null
-    if (due) {
-      interval = getInterval(due, timeUnits)
-      timeDue = getTimeDue(due, timeUnits)
+    if (timeNum) {
+      setInterval(getInterval(timeNum, timeUnits))
+      setTimeDue(getTimeDue(timeNum, timeUnits)) 
     } else if (time || date) {
-      timeDue = getDate(date, time)
-      interval = getIntervalFromDate(timeDue)
+      setTimeDue(getDate(date, time))
+      setInterval(getIntervalFromDate(timeDue))
     }
 
     
@@ -79,7 +84,7 @@ export default function AddEvent({ eventName, tags }) {
     })
 
     setNewEvent('')
-    setDue('')
+    setTimeNum('')
     setNewTags([])
     setTimeUnits('minutes')
     setTime('')
@@ -88,9 +93,8 @@ export default function AddEvent({ eventName, tags }) {
 
   return (
     <>
-    <h2>Add Event</h2>
-    
-    <div className="p-3 me-3 my-3 shadow add-event border rounded">
+   
+    <div className="add-event">
 
       <form onSubmit={handleSubmit} className="add-event-form">
 
@@ -119,9 +123,9 @@ export default function AddEvent({ eventName, tags }) {
         <span className="input-group-text bg-light">Remind me again in: </span> 
           <input 
             type="text"
-            value={due}
+            value={timeNum}
             onChange={(e) => {
-              setDue(e.target.value)
+              setTimeNum(e.target.value)
               setTime('')
               setDate('')
             }}
@@ -146,7 +150,7 @@ export default function AddEvent({ eventName, tags }) {
             value={time}
             onChange={(e) => {
               setTime(e.target.value)
-              setDue('')
+              setTimeNum('')
             }}
             className="form-input"
           />
@@ -156,7 +160,7 @@ export default function AddEvent({ eventName, tags }) {
             value={date}
             onChange={(e) => {
               setDate(e.target.value)
-              setDue('')
+              setTimeNum('')
             }}
             className="form-input"
           />
