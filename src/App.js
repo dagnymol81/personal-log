@@ -9,6 +9,7 @@ import { useAuthContext } from './hooks/useAuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Privacy from './pages/Privacy/Privacy';
 import Footer from './components/Footer';
+import Profile from './pages/Profile/Profile';
 
 function App() {
   const { user, authIsReady } = useAuthContext()
@@ -48,6 +49,15 @@ function App() {
             element={
               <Privacy />
           }/>
+
+          <Route 
+            path="/profile"
+            element={
+              user ?
+              <Profile /> :
+              <Navigate replace to="/signup" />
+            }
+          />
 
         </Routes>
         <Footer />
