@@ -4,6 +4,7 @@ import Done from './pages/Done/Done';
 import Signup from './pages/Signup/Signup';
 import Navbar from './components/Navbar';
 import Login from './pages/Login/Login';
+import Deleted from './pages/Deleted/deleted';
 import { useAuthContext } from './hooks/useAuthContext';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -48,6 +49,12 @@ function App() {
             path="/privacy" 
             element={
               <Privacy />
+          }/>
+
+          <Route 
+            path="/deleted" 
+            element={
+              <Deleted />
           }/>
 
           <Route 

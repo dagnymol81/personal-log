@@ -1,12 +1,18 @@
-.nav {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  gap: 2rem;
+.nav li {
+  margin-left: 2rem;
+  margin-right: 1rem;
+}
+
+.navbar h2 {
+  margin: 1rem;
 }
 
 .nav a {
   text-decoration: none;
   font-weight: bold;
   color: dimgray;
+}
+
+.navbar {
+  margin-bottom: 2rem;
 }

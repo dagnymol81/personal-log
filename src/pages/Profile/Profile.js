@@ -1,10 +1,6 @@
-import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { db } from '../../firebase/config'
-import { getAuth,  EmailAuthProvider, reauthenticateWithCredential, } from 'firebase/auth'
-import { redirect, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import de from "date-fns/esm/locale/de/index.js";
-
+import { getAuth,  EmailAuthProvider,  signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import {  useState } from "react";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function Profile() {
 
@@ -13,6 +9,11 @@ export default function Profile() {
   const [error, setError] = useState(null)
   const [credential, setCredential] = useState(null)
 
+  const { deleteUser } = useLogin()
+
+  const auth = getAuth();
+  const user = auth.currentUser
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const credential = EmailAuthProvider.credential(
@@ -20,31 +21,29 @@ export default function Profile() {
       password
     )
     await setCredential(credential)
-    deleteUser()
+    deleteUser(user, credential)
   }
 
-  const nav = useNavigate()
-
-  const auth = getAuth();
-  const user = auth.currentUser
-
-  const deleteUser = async () => {
-    const q = query(collection(db, "events"), where("uid", "==", user.uid));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      deleteDoc(doc.ref)
-    });
-    await deleteDoc(doc(db, "users", user.uid))
-    await reauthenticateWithCredential(user, credential)
-    await user.delete()
-    nav("/privacy")
-   }
+  let pwAccount, googleAccount = false
+  if (user.providerData[0].providerId === "password") {
+    pwAccount = true
+  } else if (user.providerData[0].providerId === "google.com") {
+    googleAccount = true
+  }
   
+  const deleteGoogleLoginAccount =  () => {
+    const provider = new GoogleAuthProvider()
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        deleteUser(user, credential)
+      })   
+  }
 
   return (
     <div>
 
-<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div className="modal" data-bs-backdrop="false" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog">
     <div className="modal-content">
       <div className="modal-body">
@@ -73,11 +72,24 @@ export default function Profile() {
     </div>
   </div>
 </div>
-
-      <p data-bs-toggle="modal" data-bs-target="#exampleModal">
+<h2>Profile</h2>
+<p>
+<strong>Name: </strong> {user.displayName}<br />
+<strong>Email: </strong> {user.email}<br />
+<strong>Logged in with:</strong>  {user.providerData[0].providerId}<br />
+<strong>Account Created:</strong>  {user.metadata.creationTime}
+</p>
+    {pwAccount && 
+      <p className="warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
       Delete my account<br />
       This will delete your account and all data. This action cannot be undone.
       </p>
+  }
+  {googleAccount && 
+  <p className="warning" onClick={() => deleteGoogleLoginAccount()}>
+    Delete my account. This will delete all your data on Personal Log, including login credentials. This action cannot be undone.
+  </p>
+  }
     </div>
   )
 }
