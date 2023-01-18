@@ -51,6 +51,7 @@ export default function AddEvent({ event }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
     let tags = newTags.map(tag => {
       return {
         value: tag.value,

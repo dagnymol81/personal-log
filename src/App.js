@@ -4,11 +4,13 @@ import Done from './pages/Done/Done';
 import Signup from './pages/Signup/Signup';
 import Navbar from './components/Navbar';
 import Login from './pages/Login/Login';
+import Deleted from './pages/Deleted/deleted';
 import { useAuthContext } from './hooks/useAuthContext';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Privacy from './pages/Privacy/Privacy';
 import Footer from './components/Footer';
+import Profile from './pages/Profile/Profile';
 
 function App() {
   const { user, authIsReady } = useAuthContext()
@@ -48,6 +50,21 @@ function App() {
             element={
               <Privacy />
           }/>
+
+          <Route 
+            path="/deleted" 
+            element={
+              <Deleted />
+          }/>
+
+          <Route 
+            path="/profile"
+            element={
+              user ?
+              <Profile /> :
+              <Navigate replace to="/signup" />
+            }
+          />
 
         </Routes>
         <Footer />

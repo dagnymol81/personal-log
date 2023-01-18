@@ -57,12 +57,8 @@ In Short: We collect personal information that you provide to us.
 </p><p>
 We collect personal information that you voluntarily provide to us when you register on the Services, express an interest in obtaining information about us or our products and Services, when you participate in activities on the Services, or otherwise when you contact us.
 </p><p>
-Personal Information Provided by You. The personal information that we collect depends on the context of your interactions with us and the Services, the choices you make, and the products and features you use. The personal information we collect may include the following:
-<ul>
-  <li>names</li>
-  <li>email addresses</li>
-  <li>user data entered on the website</li>
-</ul>
+Personal Information Provided by You. The personal information that we collect depends on the context of your interactions with us and the Services, the choices you make, and the products and features you use. The personal information we collect may include the following: names,
+  email addresses, user data entered on the website
 <p>
 Social Media Login Data. We may provide you with the option to register with us using your existing social media account details, like your Facebook, Twitter, or other social media account. If you choose to register in this way, we will collect the information described in the section called "HOW DO WE HANDLE YOUR SOCIAL LOGINS?" below.
 </p><p>
@@ -117,14 +113,12 @@ In some exceptional cases, we may be legally permitted under applicable law to p
 </ul>
 <p>
 4. WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?
-</p><p>
-In Short: We may share information in specific situations described in this section and/or with the following third parties.
-</p><p>
-We may need to share your personal information in the following situations:
-<ul>
-<li>Business Transfers. We may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of our business to another company.</li>
-<li>Other Users. When you share personal information (for example, by posting comments, contributions, or other content to the Services) or otherwise interact with public areas of the Services, such personal information may be viewed by all users and may be publicly made available outside the Services in perpetuity. If you interact with other users of our Services and register for our Services through a social network (such as Facebook), your contacts on the social network will see your name, profile photo, and descriptions of your activity. Similarly, other users will be able to view descriptions of your activity, communicate with you within our Services, and view your profile.</li>
-</ul>
+</p>
+<p>
+In Short: We may share information in specific situations described in this section and/or with the following third parties. We may need to share your personal information in the following situations:
+<br />
+Business Transfers. We may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of our business to another company.<br />
+Other Users. When you share personal information (for example, by posting comments, contributions, or other content to the Services) or otherwise interact with public areas of the Services, such personal information may be viewed by all users and may be publicly made available outside the Services in perpetuity. If you interact with other users of our Services and register for our Services through a social network (such as Facebook), your contacts on the social network will see your name, profile photo, and descriptions of your activity. Similarly, other users will be able to view descriptions of your activity, communicate with you within our Services, and view your profile.
 </p><p>
 5. HOW DO WE HANDLE YOUR SOCIAL LOGINS?
 </p><p>
@@ -325,9 +319,9 @@ Right to request deletion of the data — Request to delete
 </p><p>
 You can ask for the deletion of your personal information. If you ask us to delete your personal information, we will respect your request and delete your personal information, subject to certain exceptions provided by law, such as (but not limited to) the exercise by another consumer of his or her right to free speech, our compliance requirements resulting from a legal obligation, or any processing that may be required to protect against illegal activities.
 </p><p>
-Right to be informed — Request to know
+Right to be informed — Request to know. Depending on the circumstances, you have a right to know:
 </p>
-Depending on the circumstances, you have a right to know:
+
 <ul>
 <li>whether we collect and use your personal information;</li>
 <li>the categories of personal information that we collect;</li>
