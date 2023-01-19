@@ -3,7 +3,9 @@ import { useSignup } from '../../hooks/useSignup'
 import './Signup.css'
 import { signInWithRedirect } from 'firebase/auth'
 import { useGoogleSignup } from '../../hooks/useGoogleSignup'
-import google_signin from '../../google_signin.png'
+import { useFacebookSignup } from '../../hooks/useFacebookSignup'
+import { FacebookLoginButton } from 'react-social-login-buttons'
+import { GoogleLoginButton } from 'react-social-login-buttons'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
@@ -12,7 +14,8 @@ export default function Signup() {
   const [displayName, setDisplayName] = useState('')
 
   const { error, signup } = useSignup()
-  const { auth, provider } = useGoogleSignup()
+  const { auth: gAuth, provider: gProvider } = useGoogleSignup()
+  const { auth: fAuth, provider: fProvider } = useFacebookSignup()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -20,10 +23,12 @@ export default function Signup() {
   }
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className="signup">
 
-      <img src={google_signin} alt="Sign In With Google" onClick={() => signInWithRedirect(auth, provider)} />
+      <FacebookLoginButton onClick={() => signInWithRedirect(fAuth, fProvider)} /><br />
+      <GoogleLoginButton onClick={() => signInWithRedirect(gAuth, gProvider)} />
+
+      <h3>Or register with email:</h3>
 
       <form onSubmit={handleSubmit}>
 

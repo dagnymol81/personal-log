@@ -1,4 +1,4 @@
-import { getAuth,  EmailAuthProvider,  signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { getAuth,  EmailAuthProvider,  signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth'
 import {  useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
 
@@ -24,11 +24,13 @@ export default function Profile() {
     deleteUser(user, credential)
   }
 
-  let pwAccount, googleAccount = false
+  let pwAccount, googleAccount, facebookAccount = false
   if (user.providerData[0].providerId === "password") {
     pwAccount = true
   } else if (user.providerData[0].providerId === "google.com") {
     googleAccount = true
+  } else if (user.providerData[0].providerId === "facebook.com") {
+    facebookAccount = true
   }
   
   const deleteGoogleLoginAccount =  () => {
@@ -38,6 +40,15 @@ export default function Profile() {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         deleteUser(user, credential)
       })   
+  }
+
+  const deleteFacebookLoginAccount = () => {
+    const provider = new FacebookAuthProvider()
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        deleteUser(user, credential)
+      })
   }
 
   return (
@@ -87,6 +98,11 @@ export default function Profile() {
   }
   {googleAccount && 
   <p className="warning" onClick={() => deleteGoogleLoginAccount()}>
+    Delete my account. This will delete all your data on Personal Log, including login credentials. This action cannot be undone.
+  </p>
+  }
+  {facebookAccount && 
+  <p className="warning" onClick={() => deleteFacebookLoginAccount()}>
     Delete my account. This will delete all your data on Personal Log, including login credentials. This action cannot be undone.
   </p>
   }

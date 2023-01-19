@@ -17,7 +17,7 @@ export default function Navbar() {
   }, [user])
 
   return (
-    <nav className="navbar bg-light border-bottom p-0">
+    <nav>
       {user && <h2>Hi {user.displayName}</h2>}
       <ul className="nav">
         {user && <li className="nav-item"><Link to="/">Home</Link></li>}
