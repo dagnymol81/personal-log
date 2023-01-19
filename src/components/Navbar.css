@@ -1,10 +1,9 @@
 .nav li {
-  margin-left: 2rem;
-  margin-right: 1rem;
+  margin-right: 2rem;
 }
 
-.navbar h2 {
-  margin: 1rem;
+h2 {
+  margin-left: 2rem;
 }
 
 .nav a {
@@ -13,6 +12,13 @@
   color: dimgray;
 }
 
-.navbar {
+nav {
+  padding: 1rem 0 0 1rem;
+  background-color: rgb(242, 242, 242);
+  border-bottom: 1px solid silver;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items:flex-start;
   margin-bottom: 2rem;
 }

@@ -1,18 +1,9 @@
-form {
-  display: grid;
-  grid-template-columns: 10rem 1fr;
-  max-width: fit-content;
-  grid-row-gap: 1rem;
-}
-
-label {
-  grid-column: 1 / 2;
-}
-
-input, button {
-  grid-column: 2 / 3;
-}
-
 h2 {
-  padding-bottom: 1rem;
+  margin: 2rem 0;
+}
+
+.signup {
+  max-width: 25rem;
+  margin-left: auto;
+  margin-right: auto;
 }

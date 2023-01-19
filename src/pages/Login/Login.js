@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useLogin } from '../../hooks/useLogin'
-import google_signin from '../../google_signin.png'
 import { signInWithRedirect } from 'firebase/auth'
 import { useGoogleSignup } from '../../hooks/useGoogleSignup'
+import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons'
+import { useFacebookSignup } from '../../hooks/useFacebookSignup'
+import './Login.css'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -14,14 +16,15 @@ export default function Login() {
     login(email, password)
   }
 
-  const { auth, provider } = useGoogleSignup()
+  const { auth: gAuth, provider: gProvider } = useGoogleSignup()
+  const { auth: fAuth, provider: fProvider } = useFacebookSignup()
   
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="signup">
+      <FacebookLoginButton onClick={() => signInWithRedirect(fAuth, fProvider)} /><br />
+      <GoogleLoginButton onClick={() => signInWithRedirect(gAuth, gProvider)} />
 
-      <img src={google_signin} alt="Sign In With Google" onClick={() => signInWithRedirect(auth, provider)} />
-
+    <h2>Or login to your account:</h2>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">email: </label>

@@ -11,14 +11,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Privacy from './pages/Privacy/Privacy';
 import Footer from './components/Footer';
 import Profile from './pages/Profile/Profile';
+import Terms from './pages/Terms/Terms';
+import About from './pages/About/About';
 
 function App() {
   const { user, authIsReady } = useAuthContext()
 
   return (
-    <div className="App">
+    <div className="App dark">
       <Navbar />
       <div className="container">
+
         <Routes>
 
           <Route 
@@ -49,6 +52,18 @@ function App() {
             path="/privacy" 
             element={
               <Privacy />
+          }/>
+
+        <Route 
+            path="/terms" 
+            element={
+              <Terms />
+          }/>
+
+        <Route 
+            path="/about" 
+            element={
+              <About />
           }/>
 
           <Route 
