@@ -39,4 +39,3 @@ export const useFacebookSignup = () => {
   return { auth, provider }
 
 }
-

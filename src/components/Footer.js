@@ -6,7 +6,7 @@ export default function Footer() {
     <footer>
       <Link to="/privacy">Privacy Policy</Link>
       <Link to="/terms">Terms and Conditions</Link>
-      <Link to="/about">About Personal Log</Link>
+      <Link to="/about">About Us</Link>
     </footer>
   )
 }

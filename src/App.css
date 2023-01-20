@@ -11,11 +11,32 @@
   padding: 0.2rem;
   margin-top: 1rem;
   cursor: pointer;
+  width: fit-content;
 }
 
-.container {
-  margin: 0;
-  min-height: 90vh;
+.App {
   display: grid;
-  grid-template-rows: 1fr 5rem;
+  grid-template-rows: auto 1fr 3rem;
+  background-color: white;
+  height: 100vh;
+}
+
+.App > div {
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark {
+  background-color: rgb(30, 30, 30);
+  color: rgb(224, 224, 224);
+}
+
+.light {
+  background-color: white;
+  color: black;
+}
+
+a:hover {
+  color: gray !important;
 }

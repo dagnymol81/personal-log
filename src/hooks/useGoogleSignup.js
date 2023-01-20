@@ -38,4 +38,3 @@ export const useGoogleSignup = () => {
   return { auth, provider }
 
 }
-

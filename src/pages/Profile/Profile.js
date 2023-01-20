@@ -2,7 +2,9 @@ import { getAuth,  EmailAuthProvider,  signInWithPopup, GoogleAuthProvider, Face
 import {  useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
 
-export default function Profile() {
+import './Profile.css'
+
+export default function Profile({ toggleTheme }) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -52,7 +54,8 @@ export default function Profile() {
   }
 
   return (
-    <div>
+
+<div>
 
 <div className="modal" data-bs-backdrop="false" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog">
@@ -90,6 +93,16 @@ export default function Profile() {
 <strong>Logged in with:</strong>  {user.providerData[0].providerId}<br />
 <strong>Account Created:</strong>  {user.metadata.creationTime}
 </p>
+
+<h2>Preferences</h2>
+
+<p className="form-check form-switch">
+  <input className="form-check-input" type="checkbox" role="switch" id="darkModeSwitch" onClick={(e) => toggleTheme(e) }/>
+  <label className="form-check-label" htmlFor="darkModeSwitch">Dark Mode</label>
+</p>
+
+<br />
+<h2>Delete Your Account</h2>
     {pwAccount && 
       <p className="warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
       Delete my account<br />

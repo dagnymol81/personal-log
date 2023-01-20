@@ -1,24 +1,39 @@
-.nav li {
+nav li {
   margin-right: 2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
-h2 {
+nav li:hover {
+  color: gray !important;
+}
+
+nav > h2 {
   margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 0 !important;
 }
 
-.nav a {
+nav a {
   text-decoration: none;
-  font-weight: bold;
-  color: dimgray;
+  color: rgb(188, 188, 188);
+}
+
+.light > nav a {
+  color: black;
+}
+
+.light > nav {
+  background-color: silver;
+  border-bottom: 2px solid black;
 }
 
 nav {
-  padding: 1rem 0 0 1rem;
-  background-color: rgb(242, 242, 242);
-  border-bottom: 1px solid silver;
+  border-bottom: 2px solid silver;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items:flex-start;
   margin-bottom: 2rem;
+  padding: 0.5rem 1rem 0rem 0.5rem;
 }
