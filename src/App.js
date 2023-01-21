@@ -19,10 +19,7 @@ import About from './pages/About/About';
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from './firebase/config'
 
-import { useCollection } from './hooks/useCollection';
-
 function App() {
-
 
   const [theme, setTheme] = useState(null)
   const { user, authIsReady } = useAuthContext()

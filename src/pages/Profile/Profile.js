@@ -57,6 +57,7 @@ export default function Profile({ toggleTheme }) {
 
 <div>
 
+{/* password account deletion modal */}
 <div className="modal" data-bs-backdrop="false" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div className="modal-dialog">
     <div className="modal-content">
@@ -81,11 +82,11 @@ export default function Profile({ toggleTheme }) {
         <button className="btn btn-light border">Delete Account</button>
         {error && <p className="error">{error}</p>}
       </form>
-
       </div>
     </div>
   </div>
 </div>
+
 <h2>Profile</h2>
 <p>
 <strong>Name: </strong> {user.displayName}<br />

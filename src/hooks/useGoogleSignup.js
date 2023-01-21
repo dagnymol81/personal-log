@@ -29,7 +29,7 @@ export const useGoogleSignup = () => {
             value: 'home',
             label: 'home'
           }]
-        } )
+        }, { merge: true })
   }
   ).catch((error) => {
     console.log(error.message)

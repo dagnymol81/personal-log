@@ -4,7 +4,7 @@ import { useLogout } from './useLogout';
 import {  useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from '../firebase/config'
-import { getAuth,  EmailAuthProvider, reauthenticateWithCredential, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { getAuth,  reauthenticateWithCredential,  } from 'firebase/auth'
 
 
 //firebase imports

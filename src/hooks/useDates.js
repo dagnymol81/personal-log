@@ -4,7 +4,7 @@ export const useDates = () => {
 
   const getTimeDue = (due, units) => {
 
-    let timeDue = null
+    let timeDue
     
     if (due >= 1) {
       switch (units) {
@@ -42,6 +42,8 @@ export const useDates = () => {
 
   const getInterval = (due, units) => {
     let interval = null;
+    console.log('get interval due: ' + due)
+    console.log('get interval units: ' + units)
     switch (units) {
       case 'minutes':
         interval = due;
