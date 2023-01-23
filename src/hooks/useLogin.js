@@ -11,8 +11,6 @@ import { getAuth,  reauthenticateWithCredential,  } from 'firebase/auth'
 import { auth } from '../firebase/config'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
-
-
 export const useLogin = () => {
   const [error, setError] = useState(null)
   const { dispatch } = useAuthContext()

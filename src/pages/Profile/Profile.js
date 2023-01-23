@@ -1,6 +1,9 @@
 import { getAuth,  EmailAuthProvider,  signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth'
 import {  useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
+import { useCollection } from '../../hooks/useCollection';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from '../../firebase/config'
 
 import './Profile.css'
 
@@ -15,6 +18,22 @@ export default function Profile({ toggleTheme }) {
 
   const auth = getAuth();
   const user = auth.currentUser
+
+  const exportData = async () => {
+    const q = query(collection(db, "events"), where("uid", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+    const userData = []
+    querySnapshot.forEach((doc) => {
+      userData.push(doc.data())
+    });
+    const fileData = JSON.stringify(userData)
+    const blob = new Blob([fileData], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = "user-info.json";
+    link.href = url;
+    link.click();
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -62,6 +81,9 @@ export default function Profile({ toggleTheme }) {
   <div className="modal-dialog">
     <div className="modal-content">
       <div className="modal-body">
+        <p>
+          This will delete your account, including all your data.
+        </p>
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">email: </label>
           <input
@@ -80,8 +102,25 @@ export default function Profile({ toggleTheme }) {
             value={password}
           />
         <button className="btn btn-light border">Delete Account</button>
+        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
         {error && <p className="error">{error}</p>}
       </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* facebook account deletion modal */}
+<div className="modal" data-bs-backdrop="false" id="fbModal" tabIndex="-1" aria-labelledby="fbModal" aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-body">
+        <p>
+        This will delete your account, including all your data. This cannot be reversed.
+        </p>
+
+        <button className="btn btn-light border m-3" onClick={() => deleteFacebookLoginAccount()}>Delete my account</button>
+        <button type="button" class="btn btn-light border m-3" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
@@ -103,6 +142,8 @@ export default function Profile({ toggleTheme }) {
 </p>
 
 <br />
+<h2>Export User Data</h2>
+<button className="btn btn-light border mb-3" onClick={() => exportData()}>Export my user data (JSON format)</button>
 <h2>Delete Your Account</h2>
     {pwAccount && 
       <p className="warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -116,7 +157,7 @@ export default function Profile({ toggleTheme }) {
   </p>
   }
   {facebookAccount && 
-  <p className="warning" onClick={() => deleteFacebookLoginAccount()}>
+  <p className="warning" data-bs-toggle="modal" data-bs-target="#fbModal">
     Delete my account. This will delete all your data on Personal Log, including login credentials. This action cannot be undone.
   </p>
   }

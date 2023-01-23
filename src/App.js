@@ -16,13 +16,16 @@ import Profile from './pages/Profile/Profile';
 import Terms from './pages/Terms/Terms';
 import About from './pages/About/About';
 
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from './firebase/config'
+
+import { useCollection } from './hooks/useCollection';
 
 function App() {
 
   const [theme, setTheme] = useState(null)
   const { user, authIsReady } = useAuthContext()
+
 
   useEffect(() => {
     if (user) {
