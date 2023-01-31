@@ -30,7 +30,7 @@ export default function Signup() {
 
       <h3>Or register with email:</h3>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="signup-form">
 
         <label htmlFor="email">email: </label>
           <input

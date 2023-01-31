@@ -1,4 +1,4 @@
-form {
+.signup-form {
   display: grid;
   grid-template-columns: 10rem 1fr;
   max-width: fit-content;
@@ -13,12 +13,13 @@ input, button {
   grid-column: 2 / 3;
 }
 
-h2 {
-  padding-bottom: 1rem;
+.signup > h3 {
+  margin: 2rem 0 2rem 0;
 }
 
 .signup {
   max-width: 25rem;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 5rem;
 }

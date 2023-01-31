@@ -6,6 +6,7 @@
 .add-event-form {
   display: flex;
   flex-direction: column;
+  color: black !important;
 }
 
 .bi {
@@ -44,8 +45,4 @@
 
 .tags .form-input {
   grid-column: 2 / 3;
-}
-
-form {
-  color: black !important;
 }

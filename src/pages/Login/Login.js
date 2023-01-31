@@ -34,6 +34,7 @@ export default function Login() {
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            className="form-control my-3"
           />
         <label htmlFor="password">password: </label>
           <input
@@ -42,6 +43,7 @@ export default function Login() {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+            className="form-control my-3"
           />
         <button className="btn btn-light border">Login</button>
         {error && <p className="error">{error}</p>}

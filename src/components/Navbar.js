@@ -18,7 +18,9 @@ export default function Navbar() {
 
   return (
     <nav>
-      {user && <h2>Hi {user.displayName}</h2>}
+      {user && <h2>
+      Personal Log for {user.displayName}</h2>}
+      {!user && <h2>Personal Log</h2>}
       <ul className="nav">
         {user && <li className="nav-item"><Link to="/">Home</Link></li>}
         {!user && <li className="nav-item"><Link to="/signup">Signup</Link></li>}

@@ -1,31 +1,32 @@
+// styles
 import './App.css';
-import { Routes, Route, Navigate, } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// components
 import Done from './pages/Done/Done';
 import Signup from './pages/Signup/Signup';
 import Navbar from './components/Navbar';
 import Login from './pages/Login/Login';
 import Deleted from './pages/Deleted/deleted';
-import { useAuthContext } from './hooks/useAuthContext';
-
-import { useState, useEffect } from 'react'
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Privacy from './pages/Privacy/Privacy';
 import Footer from './components/Footer';
 import Profile from './pages/Profile/Profile';
 import Terms from './pages/Terms/Terms';
 import About from './pages/About/About';
 
-import { doc, getDoc, updateDoc, collection, query, where, getDocs } from "firebase/firestore";
+//modules
+import { useAuthContext } from './hooks/useAuthContext';
+import { BrowserRouter as Router} from 'react-router-dom'
+import { Routes, Route, Navigate, } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { doc, getDoc, updateDoc,} from "firebase/firestore";
 import { db } from './firebase/config'
-
-import { useCollection } from './hooks/useCollection';
 
 function App() {
 
   const [theme, setTheme] = useState(null)
-  const { user, authIsReady } = useAuthContext()
-
+  const { user } = useAuthContext()
+  const [darkModeChecked, setDarkModeChecked] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -35,6 +36,11 @@ function App() {
         if (docSnap.exists()) {
           let userData = docSnap.data()
           setTheme(userData.theme)
+          if (theme === 'light') {
+            setDarkModeChecked(false)
+          } else if (theme === 'dark') {
+            setDarkModeChecked(true)
+          }
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -48,14 +54,16 @@ function App() {
     const userRef = doc(db, "users", user.uid)
     if (e.target.checked) {
       setTheme('dark');
+      setDarkModeChecked(true)
       await updateDoc(userRef, {
       theme: 'dark'
         });
-    } else {
+      } else {
       setTheme('light');
+      setDarkModeChecked(false)
       await updateDoc(userRef, {
       theme: 'light'
-      });
+    });
     }
     };
 
@@ -77,10 +85,13 @@ function App() {
     }, [user])
 
   return (
+ 
     <div className={`App ${theme}`}>
+
+      <Router>
+    
       <Navbar />
         <Routes>
-
           <Route 
             path="/" 
             element={
@@ -135,6 +146,7 @@ function App() {
               user ?
               <Profile 
                 toggleTheme={toggleTheme}
+                darkModeChecked={darkModeChecked}
               /> :
               <Navigate replace to="/signup" />
             }
@@ -142,8 +154,12 @@ function App() {
 
         </Routes>
         <Footer />
+
+        </Router>
+      
     </div>
-  );
-}
+   
+  )}
+
 
 export default App;

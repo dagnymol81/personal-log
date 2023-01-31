@@ -6,8 +6,9 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from '../../firebase/config'
 
 import './Profile.css'
+import Feedback from './Feedback';
 
-export default function Profile({ toggleTheme }) {
+export default function Profile({ toggleTheme, darkModeChecked }) {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -102,7 +103,7 @@ export default function Profile({ toggleTheme }) {
             value={password}
           />
         <button className="btn btn-light border">Delete Account</button>
-        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" className="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
         {error && <p className="error">{error}</p>}
       </form>
       </div>
@@ -120,7 +121,7 @@ export default function Profile({ toggleTheme }) {
         </p>
 
         <button className="btn btn-light border m-3" onClick={() => deleteFacebookLoginAccount()}>Delete my account</button>
-        <button type="button" class="btn btn-light border m-3" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" className="btn btn-light border m-3" data-bs-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
@@ -137,11 +138,11 @@ export default function Profile({ toggleTheme }) {
 <h2>Preferences</h2>
 
 <p className="form-check form-switch">
-  <input className="form-check-input" type="checkbox" role="switch" id="darkModeSwitch" onClick={(e) => toggleTheme(e) }/>
+  <input className="form-check-input" type="checkbox" role="switch" id="darkModeSwitch" checked={darkModeChecked} onClick={(e) => toggleTheme(e) }/>
   <label className="form-check-label" htmlFor="darkModeSwitch">Dark Mode</label>
 </p>
-
 <br />
+<Feedback user={user} />
 <h2>Export User Data</h2>
 <button className="btn btn-light border mb-3" onClick={() => exportData()}>Export my user data (JSON format)</button>
 <h2>Delete Your Account</h2>
