@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useSignup } from '../../hooks/useSignup'
-import './Signup.css'
 import { signInWithRedirect } from 'firebase/auth'
 import { useGoogleSignup } from '../../hooks/useGoogleSignup'
 import { useFacebookSignup } from '../../hooks/useFacebookSignup'
 import { FacebookLoginButton } from 'react-social-login-buttons'
 import { GoogleLoginButton } from 'react-social-login-buttons'
+import { Form, Button } from 'react-bootstrap'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
@@ -28,55 +28,62 @@ export default function Signup() {
       <FacebookLoginButton onClick={() => signInWithRedirect(fAuth, fProvider)} /><br />
       <GoogleLoginButton onClick={() => signInWithRedirect(gAuth, gProvider)} />
 
-      <h3>Or register with email:</h3>
+      <h3 className="my-3">Or register with email:</h3>
 
-      <form onSubmit={handleSubmit} className="signup-form">
+      <Form onSubmit={handleSubmit} className="signup-form">
 
-        <label htmlFor="email">email: </label>
-          <input
-            required
-            type="email"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
+      <Form.Group className="mb-3" controlId="email">
+        <Form.Label>Email: </Form.Label>
+        <Form.Control 
+          required
+          type="email"
+          name="email"
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          value={email}
+        />
+      </Form.Group>
 
-        <label htmlFor="password">password: </label>
-          <input
-            required
-            type="password"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            className="input"
-          />
+      <Form.Group>
+        <Form.Label>Password: </Form.Label>
+        <Form.Control 
+          required
+          type="password"
+          name="password"
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Create a password"
+          value={password}
+        />
+      </Form.Group>
 
-        <label htmlFor="repeat">
-          repeat password: 
-        </label>
-          <input
-            required
-            type="password"
-            name="repeat"
-            onChange={(e) => setRepeatPassword(e.target.value)}
-            value={repeatPassword}
-            className="input"
-          />
+      <Form.Group>
+        <Form.Label>Repeat Password: </Form.Label>
+        <Form.Control 
+          required
+          type="password"
+          name="repeat"
+          onChange={(e) => setRepeatPassword(e.target.value)}
+          value={repeatPassword}
+          className="input"
+          placeholder="Repeat your password"
+        />
+      </Form.Group>
 
-        <label htmlFor="display">
-          display name:
-        </label>
-          <input
-            required
-            type="text"
-            onChange={(e) => setDisplayName(e.target.value)}
-            value={displayName}
-            className="input"
-          />
+      <Form.Group>
+        <Form.Label>Display Name: </Form.Label>
+        <Form.Control 
+          required
+          type="text"
+          onChange={(e) => setDisplayName(e.target.value)}
+          value={displayName}
+          className="input"
+          placeholder="Enter display name"
+        />
+      </Form.Group>
 
-        <button className="btn btn-light border">Sign Up</button>
-      </form>
-      {error && <p className="error">{error}</p>} 
+      <Button variant="secondary" className="my-3">Sign Up</Button>
+    </Form>
+    {error && <p className="error">{error}</p>} 
 
 
 

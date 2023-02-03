@@ -1,6 +1,7 @@
 import {collection, doc, addDoc} from "firebase/firestore"
 import { useState } from "react"
 import { db } from '../../firebase/config'
+import { Form, Button } from "react-bootstrap"
 
 export default function Feedback({ user }) {
 
@@ -24,23 +25,23 @@ export default function Feedback({ user }) {
    return (
     <div>
       <h2>Submit Feedback</h2>
-        <form onSubmit={handleSubmit} className="feedback-form">
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Short Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+        <Form onSubmit={handleSubmit}>
+          <Form.Control 
+              type="text"
+              placeholder="Short Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
           />
-          <br />
-          <textarea
-            className="form-control"
+         <br />
+         <Form.Control 
+            as="textarea"
+            rows={3}
             placeholder="Description"
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)} 
-          />
-          <button className="btn btn-light border my-3">Submit Feedback</button>
-        </form>
+         />
+          <Button variant="secondary my-3">Submit Feedback</Button>
+        </Form>
     </div>
   )
 }

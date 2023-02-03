@@ -1,12 +1,13 @@
 import { getAuth,  EmailAuthProvider,  signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth'
 import {  useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
-import { useCollection } from '../../hooks/useCollection';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from '../../firebase/config'
 
 import './Profile.css'
 import Feedback from './Feedback';
+
+import {  Button, Modal, Form } from 'react-bootstrap';
 
 export default function Profile({ toggleTheme, darkModeChecked }) {
 
@@ -73,95 +74,118 @@ export default function Profile({ toggleTheme, darkModeChecked }) {
       })
   }
 
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [fbShow, setfbShow] = useState(false);
+  const handlefbClose = () => setfbShow(false);
+  const handlefbShow = () => setfbShow(true);
+
+
   return (
-
-<div>
-
-{/* password account deletion modal */}
-<div className="modal" data-bs-backdrop="false" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog">
-    <div className="modal-content">
-      <div className="modal-body">
+    <div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete your account</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
         <p>
           This will delete your account, including all your data.
         </p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">email: </label>
-          <input
+      <Form>
+        <Form.Group className="mb-3" controlId="email">
+          <Form.Label>Email</Form.Label>
+          <Form.Control 
+            type="email" 
+            placeholder="Enter email" 
             required
             name="email"
-            type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
-        <label htmlFor="password">password: </label>
-          <input
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="password">
+          <Form.Label>Password</Form.Label>
+          <Form.Control 
+            type="password" 
+            placeholder="Password" 
             required
             name="password"
-            type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-        <button className="btn btn-light border">Delete Account</button>
-        <button type="button" className="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+        </Form.Group>
+        <Button variant="outline-danger me-3" onClick={handleSubmit}>Delete Account</Button>
+        <Button variant="outline-dark" onClick={handleClose}>Cancel</Button>
         {error && <p className="error">{error}</p>}
-      </form>
-      </div>
-    </div>
-  </div>
-</div>
+      </Form>
+        </Modal.Body>
+      </Modal>
 
-{/* facebook account deletion modal */}
-<div className="modal" data-bs-backdrop="false" id="fbModal" tabIndex="-1" aria-labelledby="fbModal" aria-hidden="true">
-  <div className="modal-dialog">
-    <div className="modal-content">
-      <div className="modal-body">
-        <p>
+<Modal show={fbShow} onHide={handlefbClose}>
+  <Modal.Dialog>
+    <Modal.Header closeButton>
+      <Modal.Title>Delete your account</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <p>
         This will delete your account, including all your data. This cannot be reversed.
-        </p>
-
-        <button className="btn btn-light border m-3" onClick={() => deleteFacebookLoginAccount()}>Delete my account</button>
-        <button type="button" className="btn btn-light border m-3" data-bs-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+      </p>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button variant="danger" onClick={() => deleteFacebookLoginAccount()}>Delete my account</Button>
+      <Button variant="secondary" onClick={handlefbClose}>Cancel</Button>
+    </Modal.Footer>
+  </Modal.Dialog>
+</Modal>
 
 <h2>Profile</h2>
 <p>
-<strong>Name: </strong> {user.displayName}<br />
-<strong>Email: </strong> {user.email}<br />
-<strong>Logged in with:</strong>  {user.providerData[0].providerId}<br />
-<strong>Account Created:</strong>  {user.metadata.creationTime}
+  <strong>Name: </strong> {user.displayName}<br />
+  <strong>Email: </strong> {user.email}<br />
+  <strong>Logged in with:</strong>  {user.providerData[0].providerId}<br />
+  <strong>Account Created:</strong>  {user.metadata.creationTime}
 </p>
 
 <h2>Preferences</h2>
 
-<p className="form-check form-switch">
-  <input className="form-check-input" type="checkbox" role="switch" id="darkModeSwitch" checked={darkModeChecked} onClick={(e) => toggleTheme(e) }/>
-  <label className="form-check-label" htmlFor="darkModeSwitch">Dark Mode</label>
-</p>
+<Form.Check 
+  type="switch"
+  id="darkModeSwitch"
+  label="Dark Mode"
+  onClick={(e) => toggleTheme(e) }
+/>
+
 <br />
 <Feedback user={user} />
 <h2>Export User Data</h2>
-<button className="btn btn-light border mb-3" onClick={() => exportData()}>Export my user data (JSON format)</button>
+
+<Button variant="secondary my-3" onClick={exportData}>Export my user data (JSON)</Button>
+
 <h2>Delete Your Account</h2>
     {pwAccount && 
-      <p className="warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-      Delete my account<br />
-      This will delete your account and all data. This action cannot be undone.
-      </p>
+      <>
+        <Button variant="danger my-3 me-3" onClick={handleShow}>Delete My Account</Button>
+        This will delete your account and all data. This action cannot be undone.
+      </>
+
+
   }
   {googleAccount && 
-  <p className="warning" onClick={() => deleteGoogleLoginAccount()}>
+  <>
+    <Button variant="danger my-3 me-3" onClick={() => deleteGoogleLoginAccount()}>Delete Account</Button>
     Delete my account. This will delete all your data on Personal Log, including login credentials. This action cannot be undone.
-  </p>
+  </>
+
+
   }
   {facebookAccount && 
-  <p className="warning" data-bs-toggle="modal" data-bs-target="#fbModal">
+  <>
+    <Button variant="danger my-3 me-3" onClick={handlefbShow}>Delete Account</Button>
     Delete my account. This will delete all your data on Personal Log, including login credentials. This action cannot be undone.
-  </p>
+  </>
   }
-    </div>
-  )
-}
+
+  </div>
+)}

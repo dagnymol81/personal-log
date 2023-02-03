@@ -1,11 +1,11 @@
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import { useAuthContext } from '../hooks/useAuthContext';
+import { useLogout } from '../hooks/useLogout';
+import { useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { useLogout } from "../hooks/useLogout";
-import { useAuthContext } from "../hooks/useAuthContext";
 
-import './Navbar.css'
-import { useEffect } from "react";
-
-export default function Navbar() {
+export default function PLNavbar() {
 
   const { logout } = useLogout()
   const { user, authIsReady } = useAuthContext()
@@ -17,17 +17,18 @@ export default function Navbar() {
   }, [user])
 
   return (
-    <nav>
-      {user && <h2>
-      Personal Log for {user.displayName}</h2>}
-      {!user && <h2>Personal Log</h2>}
-      <ul className="nav">
-        {user && <li className="nav-item"><Link to="/">Home</Link></li>}
-        {!user && <li className="nav-item"><Link to="/signup">Signup</Link></li>}
-        {!user && <li className="nav-item"><Link to="/login">Login</Link></li>}
-        {user && <li className="nav-item"><Link to="/profile">Profile</Link></li>}
-        {user && <li className="nav-item" onClick={logout}>Logout</li>}
-      </ul>
-    </nav>
-  )
+    <Navbar bg="light" expand="lg" className="p-3 mb-3 border-bottom">
+        <Navbar.Brand href="#home">Personal Log</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav"  className="justify-content-end">
+          <Nav>
+            {user && <Nav.Link href="/">Home</Nav.Link>}
+            {user && <Nav.Link href="/profile">Profile</Nav.Link>}
+            {user && <Nav.Link href="#" onClick={logout}>Logout</Nav.Link>}
+            {!user && <Nav.Link href="/signup">Signup</Nav.Link>}
+            {!user && <Nav.Link href="/login">Login</Nav.Link>}
+          </Nav>
+        </Navbar.Collapse>
+    </Navbar>
+  );
 }

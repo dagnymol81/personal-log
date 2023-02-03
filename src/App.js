@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // components
 import Done from './pages/Done/Done';
 import Signup from './pages/Signup/Signup';
-import Navbar from './components/Navbar';
+import PLNavbar from './components/Navbar';
 import Login from './pages/Login/Login';
 import Deleted from './pages/Deleted/deleted';
 import Privacy from './pages/Privacy/Privacy';
@@ -90,7 +90,7 @@ function App() {
 
       <Router>
     
-      <Navbar />
+      <PLNavbar />
         <Routes>
           <Route 
             path="/" 
