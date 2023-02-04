@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { isToday } from 'date-fns'
 import add from 'date-fns/add'
 import AddEvent from './AddEvent'
+import { Button, Modal } from 'react-bootstrap'
 
 export default function EventList({ events }) {
 
@@ -37,10 +38,16 @@ export default function EventList({ events }) {
   const [pastEvents, setPastEvents] = useState(null)
   const [event, setEvent] = useState(null)
 
-  const handleModal = (event) => {
-    setEvent(event)
-  }
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
 
+  const [edit, setEdit] = useState(false)
+
+  const handleShow = async (event) => {
+    setEvent(event);
+    setEdit(true)
+    setShow(true);
+  }
 
   useEffect(() => {
     if (events) {
@@ -57,22 +64,18 @@ export default function EventList({ events }) {
 
     <div className="event-list">
 
-<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div className="modal-dialog">
-    <div className="modal-content">
-      <div className="modal-body">
-        {event && <h3>Editing: {event.event}</h3>}
-        <AddEvent 
-          event={event}
+      {event && edit &&
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title><h3>Editing: {event.event}</h3></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddEvent 
+            event={event}
+            handleClose={handleClose}
           />
-      </div>
-      <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" className="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+        </Modal.Body>
+      </Modal>}
 
       <h2>Current Events</h2>
 
@@ -98,7 +101,7 @@ export default function EventList({ events }) {
               <div className="icons">
                 <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
                 <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
-                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleModal(event)}></i>
+                {/* <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i> */}
               </div>
             </div>
           </div>
@@ -122,7 +125,7 @@ export default function EventList({ events }) {
             <div className="icons">
                 <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
                 <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
-                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleModal(event)}></i>
+                {/* <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i> */}
             </div>
         </div>
       </div>
@@ -142,7 +145,7 @@ export default function EventList({ events }) {
             </div>
           <div className="icons">
             <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)}></i>
-            <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={() => handleModal(event)}></i>
+            <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={() => handleShow(event)}></i>
           </div>
           </div>
         </div>

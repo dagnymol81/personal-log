@@ -1,5 +1,5 @@
 import { db } from '../../firebase/config'
-import { collection, addDoc, doc, getDoc, Timestamp, setDoc } from 'firebase/firestore'
+import { collection, addDoc, doc, getDoc, Timestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import CreatableSelect from 'react-select/creatable';
@@ -7,7 +7,7 @@ import { useDates } from '../../hooks/useDates';
 
 import './Done.css'
 
-export default function AddEvent({ event }) {
+export default function AddEvent({ event, handleClose }) {
 
   const [options, setOptions] = useState(null)
   const [newEvent, setNewEvent] = useState('')
@@ -48,7 +48,7 @@ export default function AddEvent({ event }) {
        }
      }
      fetchUserDoc()
-  }, [user.uid])
+    }, [user.uid])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -86,6 +86,16 @@ export default function AddEvent({ event }) {
 
     setDoc(userRef, { tags: userTags }, { merge: true })
 
+    if (event) {
+      const eventRef = doc(db, "events", event.id)
+      await updateDoc(eventRef, {
+        event: newEvent,
+        tags: eventTags,
+        timeDue,
+        interval
+      })
+      handleClose()
+    } else {
     await addDoc(collection(db, 'events'), {
       event: newEvent,
       completedAt: Timestamp.fromDate(new Date()),
@@ -94,6 +104,7 @@ export default function AddEvent({ event }) {
       timeDue,
       interval
     })
+    }
 
     setNewEvent('')
     setTimeNum('')
