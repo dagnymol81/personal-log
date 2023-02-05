@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { isToday } from 'date-fns'
 import add from 'date-fns/add'
 import AddEvent from './AddEvent'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal, Card, Row, Col } from 'react-bootstrap'
 
 export default function EventList({ events }) {
 
@@ -79,77 +79,90 @@ export default function EventList({ events }) {
 
       <h2>Current Events</h2>
 
-        {eventsDue && eventsDue.map(event => (
-          <div key={event.id} className="event-listing">
-            <h3>{event.event}</h3>
-            <div className="event-details">
-              <div className="time">
-                <div>
-                  <strong>Last Completed: </strong>{isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+      {eventsDue && eventsDue.map(event => (
+        <Card key={event.id} className="my-5 shadow">
+          <Card.Body>
+            <Row>
+              <Col>
+                <Card.Title>{event.event}</Card.Title>
+                <Card.Text>
+                <strong>Last Completed: </strong>
+                  {isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
                   {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
                   &nbsp;({formatDistanceToNow(event.completedAt.toDate(), {addSuffix: true})})
                   <br />
-                  <strong>Next Up: </strong>
+                <strong>Next Up: </strong>
                   {isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
                   {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
                   &nbsp;({formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })})
                   <br />
-                  <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
+                <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
                   <span key={i}>{tag.value}&nbsp;</span>))} 
-                </div>
-              </div>
-              <div className="icons">
+                </Card.Text>
+              </Col>
+              <Col md="auto">
                 <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
                 <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
-                {/* <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i> */}
-              </div>
-            </div>
-          </div>
-        ))}
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+      ))}
 
       <h2>Coming Attractions</h2>
 
       {upcomingEvents && upcomingEvents.map(event => (
-        <div key={event.id}  className="event-listing">
-          <h3>{event.event}</h3>
-          <div className="event-details">
-            <div>
-            <strong>Last Completed: </strong> 
-            {event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
-            {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
-            <strong>Next Up: </strong>
-            {formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })}<br />
-            <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
-            <span key={i}>{tag.value}&nbsp;</span>))} 
-            </div>
-            <div className="icons">
+        <Card key={event.id} className="my-5 shadow">
+          <Card.Body>
+            <Row>
+              <Col>
+                <Card.Title>{event.event}</Card.Title>
+                <Card.Text>
+                  <strong>Last Completed: </strong> 
+                    {event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
+                    {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
+                  <strong>Next Up: </strong>
+                    {formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })}<br />
+                  <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
+                    <span key={i}>{tag.value}&nbsp;</span>))} 
+                </Card.Text>
+              </Col>
+              <Col md="auto">
                 <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
                 <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
-                {/* <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i> */}
-            </div>
-        </div>
-      </div>
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
       ))}
 
       <h2>Complete</h2>
-
-      {pastEvents && pastEvents.map(event => (
-        <div key={event.id}  className="event-listing">
-          <h3>{event.event}</h3>
-          <div className="event-details">
-          <div>
-            <strong>Last Completed: </strong>{event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
-            {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
-            <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
-            <span key={i}>{tag.value}&nbsp;</span>))} 
-            </div>
-          <div className="icons">
-            <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)}></i>
-            <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal"  onClick={() => handleShow(event)}></i>
-          </div>
-          </div>
-        </div>
+      
+        {pastEvents && pastEvents.map(event => (
+          <Card key={event.id} className="my-5 shadow">
+          <Card.Body>
+            <Row>
+              <Col>
+                <Card.Title>{event.event}</Card.Title>
+                <Card.Text>
+                <strong>Last Completed: </strong>{event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
+                  {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
+                <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
+                  <span key={i}>{tag.value}&nbsp;</span>))} 
+                </Card.Text>
+              </Col>
+              <Col md="auto">
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i>
+                <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)}></i>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
       ))}
+
     </div>
   )
 }

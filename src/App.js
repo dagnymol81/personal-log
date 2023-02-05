@@ -92,13 +92,6 @@ function App() {
     
       <PLNavbar />
         <Routes>
-          <Route 
-            path="/" 
-            element={
-              user ?
-              <Done /> :
-              <Navigate replace to="/login" />
-            }/>
 
           <Route 
             path="/signup" 
@@ -145,12 +138,18 @@ function App() {
             element={
               user ?
               <Profile 
-                toggleTheme={toggleTheme}
-                darkModeChecked={darkModeChecked}
-              /> :
+              /> 
+              :
               <Navigate replace to="/signup" />
             }
           />
+
+          <Route path="/"
+            element={
+              user ?
+              <Done /> :
+              <Navigate replace to="/login" />
+            } />
 
         </Routes>
         <Footer />

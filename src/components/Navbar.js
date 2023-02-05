@@ -22,11 +22,11 @@ export default function PLNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav"  className="justify-content-end">
           <Nav>
-            {user && <Nav.Link href="/">Home</Nav.Link>}
-            {user && <Nav.Link href="/profile">Profile</Nav.Link>}
-            {user && <Nav.Link href="#" onClick={logout}>Logout</Nav.Link>}
-            {!user && <Nav.Link href="/signup">Signup</Nav.Link>}
-            {!user && <Nav.Link href="/login">Login</Nav.Link>}
+            {user && <Link to="/">Home</Link>}
+            {user && <Link to="/profile">Profile</Link>}
+            {user && <Link to="#" onClick={logout}>Logout</Link>}
+            {!user && <Link to="/signup">Signup</Link>}
+            {!user && <Link to="/login">Login</Link>}
           </Nav>
         </Navbar.Collapse>
     </Navbar>

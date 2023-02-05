@@ -47,3 +47,15 @@ footer a {
   margin-right: auto;
   margin-top: 5rem;
 }
+
+.bi {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size: 2rem;
+}
+
+.navbar-nav > a {
+  color:rgb(72, 72, 72);
+  text-decoration: none;
+  margin-right: 2rem;
+}

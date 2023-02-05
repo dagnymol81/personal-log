@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import CreatableSelect from 'react-select/creatable';
 import { useDates } from '../../hooks/useDates';
+import { Form, Button, InputGroup } from 'react-bootstrap';
 
-import './Done.css'
 
 export default function AddEvent({ event, handleClose }) {
 
@@ -119,78 +119,72 @@ export default function AddEvent({ event, handleClose }) {
    
     <div className="add-event">
 
-      <form onSubmit={handleSubmit} className="add-event-form">
+      <Form className="add-event-form">
+    
+        <Form.Group className="my-2">
+          <Form.Control 
+            type="text"
+            placeholder="Add Event"
+            value={newEvent}
+            onChange={(e) => setNewEvent(e.target.value)}
+          />
+        </Form.Group>
 
-        <div>
-        <input 
-          className="form-control"
-          type="text"
-          placeholder="Add Event"
-          value={newEvent}
-          onChange={(e) => setNewEvent(e.target.value)}
-        />
-        </div>
-      
-      <div className="tags">
-      <span className="input-group-text bg-light">Tags: </span>
+      <Form.Group  className="my-2">
       {options && <CreatableSelect 
           onChange= {(option) => handleTags(option)} 
           value={newTags}
           options={options} 
           isMulti 
-          className="form-input"
         />}
-      </div>
+      </Form.Group>
 
-        <div className="input-group">
-        <span className="input-group-text bg-light">Remind me again in: </span> 
-          <input 
+      <InputGroup  className="my-2">
+      <InputGroup.Text>Remind Me In: </InputGroup.Text>
+          <Form.Control 
             type="text"
             value={timeNum}
             onChange={(e) => {
               setTimeNum(e.target.value)
             }}
           />
-          <select
+      <InputGroup.Text>&nbsp;</InputGroup.Text>
+          <Form.Select 
             id="timeUnits"
             value={timeUnits}
             onChange={(e) => {
               setTimeUnits(e.target.value)
             }}
-            className="bg-light form-select"
           >
-            <option value="minutes">Minutes 
-            </option>
+            <option value="minutes">Minutes</option>
             <option value="hours">Hours</option>
             <option value="days">Days </option>
             <option value="weeks">Weeks</option>
-          </select>
-        </div>
+          </Form.Select>
+      </InputGroup>
 
-        <div className="input-group">
-        <span className="input-group-text bg-light">Remind me at: </span> 
-          <input 
-            type="time"
-            value={time}
-            onChange={(e) => {
-              setTime(e.target.value)
-            }}
-            className="form-input"
-          />
-          <span className="input-group-text bg-light">&nbsp;</span> 
-          <input 
-            type="date"
-            value={date}
-            onChange={(e) => {
-              setDate(e.target.value)
-            }}
-            className="form-input"
-          />
-          <span className="input-group-text bg-light">&nbsp;</span> 
-        </div>
+      <InputGroup  className="my-2">
+        <InputGroup.Text>Remind Me At: </InputGroup.Text>
+        <Form.Control 
+          type="time"
+          value={time}
+          onChange={(e) => {
+            setTime(e.target.value)
+          }}
+        />
+        <InputGroup.Text>&nbsp;</InputGroup.Text>
+        <Form.Control 
+          type="date"
+          value={date}
+          onChange={(e) => {
+            setDate(e.target.value)
+          }}
+        />
+      </InputGroup>
 
-        <button className="btn btn-light border rounded">Add Event</button>
-      </form>
+        <Button variant="secondary" onClick={handleSubmit}>Add Event</Button>
+
+      </Form>
     </div>
     </>
   )
