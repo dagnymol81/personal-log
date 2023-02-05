@@ -24,8 +24,14 @@ export default function AddEvent({ event, handleClose }) {
   const userRef = doc(db, "users", user.uid);
 
   const handleTags = (option) => {
-    setNewTags(option)
-    setOptions([...option, ...options])
+    const _newTags = option.map((element) => {
+      element = {
+        label: element.label,
+        value: element.value
+      }
+      return element
+    })
+    setNewTags(_newTags)
   }
 
   useEffect(() => {
@@ -68,29 +74,15 @@ export default function AddEvent({ event, handleClose }) {
       interval = getIntervalFromDate(dueDate)
     }
 
-    const userTags = options.map((element) => {
-      element = {
-        label: element.label,
-        value: element.value
-      }
-      return element
-    })
+    const userTags = options.concat(newTags.filter((item) => newTags.indexOf(item) < 0))
 
-    const eventTags = newTags.map((element) => {
-      element = {
-        label: element.label,
-        value: element.value
-      }
-      return element
-    })
-
-    setDoc(userRef, { tags: userTags }, { merge: true })
+    await updateDoc(userRef, { tags: userTags })
 
     if (event) {
       const eventRef = doc(db, "events", event.id)
       await updateDoc(eventRef, {
         event: newEvent,
-        tags: eventTags,
+        tags: newTags,
         timeDue,
         interval
       })
@@ -100,7 +92,7 @@ export default function AddEvent({ event, handleClose }) {
       event: newEvent,
       completedAt: Timestamp.fromDate(new Date()),
       uid: user.uid,
-      tags: eventTags,
+      tags: newTags,
       timeDue,
       interval
     })
