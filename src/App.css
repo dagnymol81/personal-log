@@ -17,7 +17,21 @@
 }
 
 .dark nav {
-  background-color: rgb(72, 72, 72);
+  background-color: rgb(72, 72, 72) !important;
+  color: rgb(224, 224, 224) !important;
+}
+
+.dark nav a, .dark nav a:visited {
+  color: rgb(224, 224, 224) !important;
+}
+
+.dark .card-body  {
+  background-color: rgb(72, 72, 72) !important;
+  color: rgb(224, 224, 224) !important;
+}
+
+form  {
+  color: black !important;
 }
 
 .light {

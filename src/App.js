@@ -138,6 +138,7 @@ function App() {
             element={
               user ?
               <Profile 
+              toggleTheme={toggleTheme}
               /> 
               :
               <Navigate replace to="/signup" />

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import CreatableSelect from 'react-select/creatable';
 import { useDates } from '../../hooks/useDates';
-import { Form, Button, InputGroup } from 'react-bootstrap';
+import { Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
 
 
 export default function AddEvent({ event, handleClose }) {
@@ -113,16 +113,17 @@ export default function AddEvent({ event, handleClose }) {
 
       <Form className="add-event-form">
     
-        <Form.Group className="my-2">
+        <InputGroup className="my-2">
+          <InputGroup.Text>Event:</InputGroup.Text>
           <Form.Control 
             type="text"
             placeholder="Add Event"
             value={newEvent}
             onChange={(e) => setNewEvent(e.target.value)}
           />
-        </Form.Group>
+        </InputGroup>
 
-      <Form.Group  className="my-2">
+      <Form.Group className="my-2">
       {options && <CreatableSelect 
           onChange= {(option) => handleTags(option)} 
           value={newTags}
