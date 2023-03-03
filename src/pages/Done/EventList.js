@@ -95,15 +95,12 @@ export default function EventList({ events }) {
                   {isToday(event.completedAt.toDate()) && event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}
                   {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}
                   &nbsp;({formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })})
-                  <br />
-                <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
-                  <span key={i}>{tag.value}&nbsp;</span>))} 
                 </Card.Text>
               </Col>
               <Col md="auto">
-                <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
-                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
-                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i>
+                <i className="bi bi-check2-circle" onClick={() => markComplete(event)} aria-label="Mark Complete"></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)} aria-label="Repeat Task"></i>
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}aria-label="Edit Task"></i>
               </Col>
             </Row>
           </Card.Body>
@@ -124,14 +121,12 @@ export default function EventList({ events }) {
                     {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
                   <strong>Next Up: </strong>
                     {formatDistanceToNow(event.timeDue.toDate(), { addSuffix: true })}<br />
-                  <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
-                    <span key={i}>{tag.value}&nbsp;</span>))} 
                 </Card.Text>
               </Col>
               <Col md="auto">
-                <i className="bi bi-check2-circle" onClick={() => markComplete(event)}></i>
-                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
-                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i>
+                <i className="bi bi-check2-circle" onClick={() => markComplete(event)} aria-label="Mark Complete"></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)} aria-label="Repeat Task"></i>
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)} aria-label="Edit Task"></i>
               </Col>
             </Row>
           </Card.Body>
@@ -149,14 +144,12 @@ export default function EventList({ events }) {
                 <Card.Text>
                 <strong>Last Completed: </strong>{event.completedAt.toDate().toLocaleTimeString('en-US', {timeStyle: "short"})}&nbsp;
                   {!isToday(event.completedAt.toDate()) && event.completedAt.toDate().toDateString()}<br />
-                <strong>Tags: </strong>{event.tags && event.tags.map((tag, i) => (
-                  <span key={i}>{tag.value}&nbsp;</span>))} 
                 </Card.Text>
               </Col>
               <Col md="auto">
-                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)}></i>
-                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)}></i>
-                <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)}></i>
+                <i className="bi bi-arrow-repeat" onClick={() => repeatTask(event)} aria-label="Repeat Task"></i>
+                <i className="bi bi-pencil-square"  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleShow(event)} aria-label="Edit Task"></i>
+                <i className="bi bi-x-circle" onClick={() => deleteItem(event.id)} aria-label="Delete Item"></i>
               </Col>
             </Row>
           </Card.Body>

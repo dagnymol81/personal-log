@@ -11,7 +11,6 @@ export default function AddEvent({ event, handleClose }) {
 
   const [options, setOptions] = useState(null)
   const [newEvent, setNewEvent] = useState('')
-  const [newTags, setNewTags] = useState([])
   const [timeNum, setTimeNum] = useState('')
   const [timeUnits, setTimeUnits] = useState('minutes')
   const [time, setTime] = useState('')
@@ -23,21 +22,9 @@ export default function AddEvent({ event, handleClose }) {
 
   const userRef = doc(db, "users", user.uid);
 
-  const handleTags = (option) => {
-    const _newTags = option.map((element) => {
-      element = {
-        label: element.label,
-        value: element.value
-      }
-      return element
-    })
-    setNewTags(_newTags)
-  }
-
   useEffect(() => {
     if (event) {
       setNewEvent(event.event)
-      setNewTags(event.tags)
     }
   }, [event])
 
@@ -47,7 +34,6 @@ export default function AddEvent({ event, handleClose }) {
        const docSnap = await getDoc(docRef)
        if (docSnap.exists()) {
         let userData = docSnap.data()
-        setOptions(userData.tags)
        } else {
          // doc.data() will be undefined in this case
          console.log("No such document!");
@@ -74,15 +60,10 @@ export default function AddEvent({ event, handleClose }) {
       interval = getIntervalFromDate(dueDate)
     }
 
-    const userTags = options.concat(newTags.filter((item) => newTags.indexOf(item) < 0))
-
-    await updateDoc(userRef, { tags: userTags })
-
     if (event) {
       const eventRef = doc(db, "events", event.id)
       await updateDoc(eventRef, {
         event: newEvent,
-        tags: newTags,
         timeDue,
         interval
       })
@@ -92,7 +73,6 @@ export default function AddEvent({ event, handleClose }) {
       event: newEvent,
       completedAt: Timestamp.fromDate(new Date()),
       uid: user.uid,
-      tags: newTags,
       timeDue,
       interval
     })
@@ -100,7 +80,6 @@ export default function AddEvent({ event, handleClose }) {
 
     setNewEvent('')
     setTimeNum('')
-    setNewTags([])
     setTimeUnits('minutes')
     setTime('')
     setDate('')
@@ -122,15 +101,6 @@ export default function AddEvent({ event, handleClose }) {
             onChange={(e) => setNewEvent(e.target.value)}
           />
         </InputGroup>
-
-      <Form.Group className="my-2">
-      {options && <CreatableSelect 
-          onChange= {(option) => handleTags(option)} 
-          value={newTags}
-          options={options} 
-          isMulti 
-        />}
-      </Form.Group>
 
       <InputGroup  className="my-2">
       <InputGroup.Text>Remind Me In: </InputGroup.Text>
